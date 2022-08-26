@@ -1,0 +1,34 @@
+// COLORS
+$white: rgb(255, 255, 255);
+$darkest: rgb(10, 10, 10);
+$darker: rgb(40, 40, 40);
+$dark: rgb(60, 60, 60);
+
+// RESET
+html {
+  background-color: $darkest;
+  font-family: sans-serif;
+  color: $white;
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+// TYPOGRAPHY
+h1 {
+  text-align: center;
+  border-bottom: 1px solid $darker;
+  padding: 24px;
+  margin: 0;
+}
+
+// COMPONENTS
+@import "components/Instrument";
+@import "components/Knob";
+@import "components/Mixer";
+
