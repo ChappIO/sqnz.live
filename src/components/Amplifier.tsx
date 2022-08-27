@@ -1,32 +1,30 @@
-import {PropsWithChildren, useEffect, useState} from "react";
+import {PropsWithChildren, useEffect} from "react";
 import {AudioDestinationProvider, useDestination} from "../hooks/useDestination";
 import {useAudioContext} from "../hooks/useAudioContext";
-import {VolumeKnob} from "./VolumeKnob";
+import {useSingleton} from "../hooks/useSingleton";
 
 export interface Props {
-    max: number
-    label: string;
-    defaultValue?: number;
+    volumePercent: number
 }
 
-export const Amplifier = ({children, max, label, defaultValue}: PropsWithChildren<Props>) => {
+export const Amplifier = ({children, volumePercent}: PropsWithChildren<Props>) => {
     const destination = useDestination();
     const context = useAudioContext();
-    const [node] = useState(() => {
-        const node = context.createGain();
-        node.connect(destination);
-        return node;
-    });
-    const [volume, setVolume] = useState(() => (defaultValue === undefined ? 100 : defaultValue));
+    const node = useSingleton(() => context.createGain());
 
     useEffect(() => {
-        node.gain.setTargetAtTime(volume / 100.0, context.currentTime, 0.01)
-    }, [context, volume, node]);
+        node.connect(destination);
+        return () => node.disconnect();
+    }, [node, destination]);
+
+    useEffect(() => {
+        node.gain.setTargetAtTime(volumePercent / 100.0, context.currentTime, 0.01)
+    }, [node, volumePercent])
+
 
     return (
         <AudioDestinationProvider destination={node}>
             {children}
-            <VolumeKnob defaultValue={defaultValue} max={max} value={volume} label={label} onChange={setVolume}/>
         </AudioDestinationProvider>
     )
 }

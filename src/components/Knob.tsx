@@ -1,4 +1,4 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 export interface Props {
     label: string;
@@ -9,14 +9,34 @@ export interface Props {
     onChange: (newValue: number) => void;
 }
 
+const distanceToFullRotation = 200;
+
 export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) => {
     const [lastOffset, setLastOffset] = useState<number>(0)
+    const [actualValue, setActualValue] = useState<number>(defaultValue);
     const handle = useRef<HTMLDivElement | null>(null);
     const ghost = useRef<Element | null>(null);
     const knob = useRef<HTMLDivElement | null>(null);
-    const rangePerPercent = (max - min) / 100;
+    const range = max - min;
+    const rangePerPercent = (range) / 100;
     const percent = (value - min) / rangePerPercent;
     const rotationDeg = Math.round(percent * 360 / 100);
+    const handleChange = onChange;
+
+    useEffect(() => {
+        setActualValue(value);
+    }, [value]);
+
+    useEffect(() => {
+        setActualValue(defaultValue);
+    }, [defaultValue]);
+
+    useEffect(() => {
+        const rounded = Math.round(actualValue);
+        if (value !== rounded) {
+            handleChange(rounded)
+        }
+    }, [actualValue, value, handleChange]);
     return (
         <div className="knob" ref={knob}>
             <div className="handle" ref={handle}
@@ -25,7 +45,7 @@ export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) =>
                  data-percent={percent}
                  data-rotate={rotationDeg}
                  onDoubleClick={() => {
-                     onChange(defaultValue);
+                     setActualValue(defaultValue);
                  }}
                  onDragStart={(e) => {
                      setLastOffset(0);
@@ -39,22 +59,21 @@ export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) =>
                      knob.current!.removeChild(ghost.current!);
                      ghost.current = null;
                  }}
-                 onDrag={(e) => {
+                 onDragCapture={(e) => {
+                     if (e.pageY === 0 && e.pageX === 0) {
+                         // Fix: Chrome bug which fires a drag event on end
+                         return;
+                     }
                      const offset = e.nativeEvent.offsetX - e.nativeEvent.offsetY;
                      if (offset !== lastOffset) {
-                         const delta = offset - lastOffset;
-                         const newValue = Math.round(delta * rangePerPercent / 2 + value);
-                         if (newValue !== value) {
-                             onChange(
-                                 Math.min(
-                                     Math.max(
-                                         newValue,
-                                         min
-                                     ),
-                                     max
-                                 )
-                             );
-                         }
+                         const delta = (offset - lastOffset) / distanceToFullRotation;
+                         setActualValue(Math.min(
+                             Math.max(
+                                 delta * range + actualValue,
+                                 min
+                             ),
+                             max
+                         ));
                          setLastOffset(offset);
                      }
                  }}>

@@ -1,5 +1,21 @@
-import {Knob, Props as KnobProps} from "./Knob";
+import {Knob} from "./Knob";
+import {Amplifier} from "./Amplifier";
+import {PropsWithChildren, useState} from "react";
 
-export type Props = Omit<KnobProps, 'defaultValue' | 'min' | 'max'> & { max?: number, defaultValue?: number };
+export interface Props {
+    label: string;
+    defaultValue: number;
+    max: number;
+}
 
-export const VolumeKnob = (props: Props) => <Knob  defaultValue={100} min={0} max={100} {...props} label={`${props.value} % ${props.label}`} />
+export const VolumeKnob = ({label, defaultValue, max, children}: PropsWithChildren<Props>) => {
+    const [volume, setVolume] = useState(() => defaultValue)
+
+    return (
+        <Amplifier volumePercent={volume}>
+            {children}
+            <Knob label={`${volume} % ${label}`} min={0} max={max} value={volume} defaultValue={defaultValue}
+                  onChange={setVolume}/>
+        </Amplifier>
+    )
+};

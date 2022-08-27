@@ -1,8 +1,11 @@
 import {createContext, PropsWithChildren, useContext, useEffect} from "react";
 import {EventEmitter, EventListener} from "../utils/EventEmitter";
+import {Note} from "../music/Note";
 
 export interface TriggerEvent {
-    trigger: {}
+    trigger: {
+        note: Note;
+    }
 }
 
 export class TriggerSource extends EventEmitter<TriggerEvent> {
