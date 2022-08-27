@@ -17,6 +17,7 @@ export const useTrigger = (listener: EventListener<TriggerEvent['trigger']>) => 
     const source = useContext(Context);
 
     useEffect(() => {
+        console.log('register');
         return source.addEventListener('trigger', listener);
     }, [listener, source]);
 };

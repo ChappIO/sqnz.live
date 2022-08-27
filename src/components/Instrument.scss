@@ -1,8 +1,44 @@
 .instrument {
-  width: 192px;
-  height: 96px;
+  height: 120px;
+  padding: 6px;
   display: flex;
   align-items: center;
   background-color: $darker;
   border-radius: 3px;
+  transition-duration: 0.3s;
+  transition-property: box-shadow, border;
+  border: 3px solid $dark;
+
+  $colors: (
+          #72e5ef,
+          #32a190,
+          #d5ff97,
+          #699f3c,
+          #21f0b6,
+          #66a1e5,
+          #8184fb,
+          #f2daff,
+          #e27db1,
+          #fe5cde,
+          #7cee4d,
+          #8f937f,
+          #fcd107,
+          #fd5917,
+          #e08761,
+          #fde096,
+          #e8fd18
+  );
+
+  &.trigger {
+    transition-duration: 0s;
+
+    @for $i from 0 to length($colors) * 2 {
+      $color:  nth($colors, $i % length($colors) + 1);
+      &:nth-child(#{$i}) {
+        border-color: $color;
+        box-shadow: 0 0 10px $color;
+      }
+    }
+  }
+
 }

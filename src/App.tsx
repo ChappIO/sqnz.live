@@ -4,7 +4,6 @@ import {Instrument} from "./components/Instrument";
 import {TransportControls} from "./components/TransportControls";
 import {ReverbKnob} from "./components/ReverbKnob";
 import {Tone} from "./music/Note";
-import {TriggerSequence} from "./components/TriggerSequence";
 import {Gate} from "./components/Gate";
 import {MultimodeOscillator} from "./components/MutimodeOscillator";
 
@@ -48,19 +47,15 @@ export const App = () => {
             <TransportControls/>
             <Mixer>
                 <ReverbKnob>
-                    <Instrument>
-                        <TriggerSequence interval={2} notes={melody}>
-                            <Gate>
-                                <MultimodeOscillator/>
-                            </Gate>
-                        </TriggerSequence>
+                    <Instrument interval={2} notes={melody}>
+                        <Gate>
+                            <MultimodeOscillator/>
+                        </Gate>
                     </Instrument>
-                    <Instrument>
-                        <TriggerSequence interval={4} notes={bass}>
-                            <Gate>
-                                <MultimodeOscillator/>
-                            </Gate>
-                        </TriggerSequence>
+                    <Instrument interval={4} notes={bass}>
+                        <Gate>
+                            <MultimodeOscillator/>
+                        </Gate>
                     </Instrument>
                 </ReverbKnob>
             </Mixer>
