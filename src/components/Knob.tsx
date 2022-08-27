@@ -15,12 +15,14 @@ export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) =>
     const ghost = useRef<Element | null>(null);
     const knob = useRef<HTMLDivElement | null>(null);
     const rangePerPercent = (max - min) / 100;
-    const percent = min + (value / rangePerPercent);
+    const percent = (value - min) / rangePerPercent;
     const rotationDeg = Math.round(percent * 360 / 100);
     return (
         <div className="knob" ref={knob}>
             <div className="handle" ref={handle}
                  draggable
+                 data-value={value}
+                 data-percent={percent}
                  data-rotate={rotationDeg}
                  onDoubleClick={() => {
                      onChange(defaultValue);

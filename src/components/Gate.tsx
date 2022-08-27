@@ -1,4 +1,4 @@
-import {PropsWithChildren, useCallback, useEffect, useState} from "react";
+import {PropsWithChildren, useCallback, useState} from "react";
 import {AudioDestinationProvider, useDestination} from "../hooks/useDestination";
 import {useAudioContext} from "../hooks/useAudioContext";
 import {useTrigger} from "../hooks/useTrigger";
@@ -18,8 +18,8 @@ export const Gate = ({children, time}: PropsWithChildren<Props>) => {
     });
 
     useTrigger(useCallback(() => {
-        node.gain.setTargetAtTime(1, context.currentTime, 0.01)
-        node.gain.setTargetAtTime(0, context.currentTime + (time / 1000), 0.01)
+        node.gain.setTargetAtTime(1, context.currentTime, 0.001)
+        node.gain.setTargetAtTime(0, context.currentTime + (time / 1000), 0.001)
     }, [node, context, time]))
 
     return (

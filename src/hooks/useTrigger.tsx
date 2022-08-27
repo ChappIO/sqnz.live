@@ -1,31 +1,20 @@
 import {createContext, PropsWithChildren, useContext, useEffect} from "react";
+import {EventEmitter, EventListener} from "../utils/EventEmitter";
 
-export class TriggerSource {
-    listeners: TriggerListener[] = [];
-
-    addListener(listener: TriggerListener) {
-        this.listeners.push(listener);
-    }
-
-    removeListener(listener: TriggerListener) {
-        this.listeners = this.listeners.filter(l => l === listener);
-    }
-
-    fire() {
-        this.listeners.forEach(l => l());
-    }
+export interface TriggerEvent {
+    trigger: {}
 }
 
-export type TriggerListener = () => void;
+export class TriggerSource extends EventEmitter<TriggerEvent> {
+}
 
 const Context = createContext<TriggerSource>(new TriggerSource());
 
-export const useTrigger = (listener: TriggerListener) => {
+export const useTrigger = (listener: EventListener<TriggerEvent['trigger']>) => {
     const source = useContext(Context);
 
     useEffect(() => {
-        source.addListener(listener);
-        return () => source.removeListener(listener);
+        return source.addEventListener('trigger', listener);
     }, [listener, source]);
 };
 

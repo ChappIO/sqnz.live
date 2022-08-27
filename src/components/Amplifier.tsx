@@ -5,9 +5,11 @@ import {VolumeKnob} from "./VolumeKnob";
 
 export interface Props {
     max: number
+    label: string;
+    defaultValue?: number;
 }
 
-export const Amplifier = ({children, max}: PropsWithChildren<Props>) => {
+export const Amplifier = ({children, max, label, defaultValue}: PropsWithChildren<Props>) => {
     const destination = useDestination();
     const context = useAudioContext();
     const [node] = useState(() => {
@@ -15,7 +17,7 @@ export const Amplifier = ({children, max}: PropsWithChildren<Props>) => {
         node.connect(destination);
         return node;
     });
-    const [volume, setVolume] = useState(100);
+    const [volume, setVolume] = useState(() => (defaultValue === undefined ? 100 : defaultValue));
 
     useEffect(() => {
         node.gain.setTargetAtTime(volume / 100.0, context.currentTime, 0.01)
@@ -24,7 +26,7 @@ export const Amplifier = ({children, max}: PropsWithChildren<Props>) => {
     return (
         <AudioDestinationProvider destination={node}>
             {children}
-            <VolumeKnob max={max} value={volume} onChange={setVolume}/>
+            <VolumeKnob defaultValue={defaultValue} max={max} value={volume} label={label} onChange={setVolume}/>
         </AudioDestinationProvider>
     )
 }

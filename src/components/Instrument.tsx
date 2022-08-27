@@ -1,15 +1,15 @@
 import {PropsWithChildren} from "react";
-import {TriggerButton} from "./TriggerButton";
 import {Oscillator} from "./Oscillator";
 import {Amplifier} from "./Amplifier";
 import {Gate} from "./Gate";
+import {TriggerButton} from "./TriggerButton";
 
-export const Instrument = ({children}: PropsWithChildren) => {
+export const Instrument = ({}: PropsWithChildren) => {
     return (
         <div className="instrument">
-            <Amplifier max={115}>
+            <Amplifier max={115} label="vol">
                 <TriggerButton>
-                    <Gate time={500}>
+                    <Gate time={50}>
                         <Oscillator/>
                     </Gate>
                 </TriggerButton>
