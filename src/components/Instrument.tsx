@@ -1,27 +1,68 @@
-import {PropsWithChildren, useCallback, useState} from "react";
-import {VolumeKnob} from "./VolumeKnob";
-import {Props as SequenceProps, TriggerSequence} from './TriggerSequence';
-import {TriggerSteal} from "./TriggerSteal";
+import {ReactElement, useCallback, useEffect, useState} from "react";
+import {Amplifier} from "./audio/Amplifier";
+import {Knob} from "./Knob";
+import {SequenceTrigger} from "../triggers/SequenceTrigger";
+import {useTrigger} from "../hooks/useTrigger";
+import {useKey} from "../hooks/useKeyDown";
 
-export type Props = SequenceProps;
 
-export const Instrument = ({children, ...sequenceProps}: PropsWithChildren<Props>) => {
+const StealGate = ({onGate}: { onGate: (state: boolean) => void }) => {
+    const trigger = useTrigger();
+    useEffect(() => {
+        return trigger.unsubscribe(
+            trigger.addEventListener('gateOpen', () => onGate(true)),
+            trigger.addEventListener('gateClose', () => onGate(false)),
+        );
+    }, [trigger, onGate]);
+    return null;
+}
+
+export interface Props {
+    name: string;
+    macroControls: ReactElement;
+    settings: ReactElement;
+    audioEngine: ReactElement;
+}
+
+export const Instrument = ({name, macroControls, settings, audioEngine}: Props) => {
     const [trigger, setTrigger] = useState(false);
-    const handleTrigger = useCallback(
-        () => {
-            setTrigger(true);
-            setTimeout(() => setTrigger(false), 10);
-        },
-        []
-    )
+    const [volume, setVolume] = useState(100);
+    const [isEdit, setEdit] = useState(false);
+
+    useKey('keydown', 'Escape', () => setEdit(false));
+
     return (
-        <div className={`instrument ${trigger ? 'trigger' : ''}`}>
-            <VolumeKnob defaultValue={100} max={115} label="vol">
-                <TriggerSequence {...sequenceProps}>
-                    {children}
-                    <TriggerSteal onTrigger={handleTrigger}/>
-                </TriggerSequence>
-            </VolumeKnob>
+        <div className="instrument">
+            <div className={`macro-controls ${trigger ? 'trigger' : ''}`}>
+                <div className="header">
+                    <h2>{name}</h2>
+                    <button onClick={() => {
+                        setEdit(true);
+                    }}>Edit</button>
+                </div>
+                <div className="controls">
+                    {macroControls}
+                    <Knob label={`${volume} %`} min={0} max={115} value={volume} defaultValue={100} onChange={setVolume}/>
+                </div>
+            </div>
+            <Amplifier volume={volume}>
+                <SequenceTrigger gate={0.1}>
+                    <StealGate onGate={setTrigger}/>
+                    {audioEngine}
+                </SequenceTrigger>
+            </Amplifier>
+            {isEdit && (
+                <div className="instrument-config" onClick={(e) => {
+                    if(e.target === e.currentTarget) {
+                        setEdit(false);
+                    }
+                }}>
+                    <h2>{name}</h2>
+                    <div className="config-panel">
+                        {settings}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

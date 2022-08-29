@@ -1,4 +1,4 @@
-export enum Tone {
+export enum Note {
     "C0" = 16.35,
     "C#0" = 17.32,
     "Db0" = 17.32,
@@ -141,9 +141,4 @@ export enum Tone {
     "D8" = 4698.64,
     "D#8" = 4978.03,
     "Eb8" = 4978.03
-}
-
-export interface Note {
-    tone: Tone;
-    gate: number;
 }

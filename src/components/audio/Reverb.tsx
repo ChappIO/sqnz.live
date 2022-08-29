@@ -1,9 +1,8 @@
-import {useAudioContext} from "../hooks/useAudioContext";
-import {useSingleton} from "../hooks/useSingleton";
-import {AudioDestinationProvider, useDestination} from "../hooks/useDestination";
 import {PropsWithChildren, useEffect} from "react";
+import {useAudioNode} from "../../hooks/useAudioNode";
+import {AudioDestinationProvider} from "../../hooks/useDestination";
 
-export enum ReverbTypes {
+export enum ReverbFiles {
     'Block Inside' = 'Block Inside.wav',
     'Bottle Hall' = 'Bottle Hall.wav',
     'Cement Blocks 1' = 'Cement Blocks 1.wav',
@@ -44,29 +43,28 @@ export enum ReverbTypes {
     'Vocal Duo' = 'Vocal Duo.wav',
 }
 
+export type ReverbPreset = keyof typeof ReverbFiles;
+
+export const ReverbPresets = Object.keys(ReverbFiles) as ReverbPreset[];
+
 export interface Props {
-    preset: keyof typeof ReverbTypes
+    preset?: ReverbPreset
 }
 
 export const Reverb = ({children, preset}: PropsWithChildren<Props>) => {
-    const context = useAudioContext();
-    const destination = useDestination();
-    const convolver = useSingleton(() => context.createConvolver());
+    const [context, convolver, destination] = useAudioNode(context => context.createConvolver(), !preset || !(preset in ReverbFiles));
 
     useEffect(() => {
-        convolver.connect(destination);
-        return () => convolver.disconnect();
-    }, [convolver, destination]);
-
-    useEffect(() => {
-        fetch(`/reverb/${ReverbTypes[preset]}`)
-            .then(result => result.arrayBuffer())
-            .then(buffer => context.decodeAudioData(buffer))
-            .then(buffer => convolver.buffer = buffer)
+        if (preset && preset in ReverbFiles) {
+            fetch(`/reverb/${ReverbFiles[preset]}`)
+                .then(result => result.arrayBuffer())
+                .then(buffer => context.decodeAudioData(buffer))
+                .then(buffer => convolver.buffer = buffer)
+        }
     }, [preset, convolver, context]);
 
     return (
-        <AudioDestinationProvider destination={convolver}>
+        <AudioDestinationProvider destination={destination}>
             {children}
         </AudioDestinationProvider>
     )

@@ -21,8 +21,7 @@
     @for $i from 0 through 360 {
       &[data-rotate = "#{$i}"] {
         & > .pointer {
-
-          transform:  translate(23px, 6px) rotate(#{$i}deg);
+          transform: translate(23px, 6px) rotate(#{$i}deg) scaleY(-1);
         }
       }
     }
@@ -37,4 +36,10 @@
 
   & > .label {
   }
+}
+
+
+.knobs {
+  display: flex;
+  flex-direction: row;
 }

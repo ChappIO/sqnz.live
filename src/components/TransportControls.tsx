@@ -2,15 +2,13 @@ import {useTransport} from "../hooks/useTransport";
 import {Knob} from "./Knob";
 import {useCallback, useEffect, useState} from "react";
 import {useReload} from "../hooks/useReload";
-import {Metronome} from "./Metronome";
-import {Amplifier} from "./Amplifier";
-import {useKeyDown} from "../hooks/useKeyDown";
+import {useKey} from "../hooks/useKeyDown";
 
 export const TransportControls = () => {
     const transport = useTransport();
     const [bpm, setBpm] = useState(120);
     const reload = useReload();
-    useKeyDown(' ', useCallback(() => {
+    useKey('keydown', ' ', useCallback(() => {
         if (transport.isPlaying()) {
             transport.stop();
         } else {
@@ -41,7 +39,6 @@ export const TransportControls = () => {
                 {transport.isPlaying() ? "Stop" : "Play"}
             </button>
             <Knob label={`${bpm} bpm`} min={20} max={200} value={bpm} defaultValue={120} onChange={setBpm}/>
-            <Metronome/>
         </div>
     );
 }
