@@ -20,7 +20,7 @@ export class EventEmitter<E> {
     }
 
     public removeEventListener<R extends keyof E>(eventType: R, listener: EventListener<E[R]>) {
-        this.listeners[eventType] = this.listeners[eventType]?.filter(l => l === listener);
+        this.listeners[eventType] = this.listeners[eventType]?.filter(l => l !== listener);
     }
 
     public fire<R extends keyof E>(eventType: R, event: E[R]) {

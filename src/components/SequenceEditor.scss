@@ -1,0 +1,60 @@
+.sequencer.instrument-config {
+  .config-panel {
+    width: (32px + 3px) * 16 + 12px + 12px;
+
+    .sequence-editor {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+
+        .step {
+          width: 32px;
+          height: 32px;
+          background-color: $dark;
+          transition-duration: 0.3s;
+          transition-property: background-color, box-shadow;
+          cursor: pointer;
+
+          &:hover, &.selected {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px white;
+          }
+
+          &.highlight {
+            transition-duration: 0s;
+            background-color: $light;
+          }
+
+          &.note {
+            transition-duration: 0s;
+            background-color: $highlight;
+          }
+
+          &.active {
+            transition-duration: 0s;
+            background-color: yellow;
+            box-shadow: 0 0 10px yellow;
+          }
+
+          &.selected {
+            transition-duration: 0s;
+            background-color: white;
+
+            &.note {
+              background-color: lighten($highlight, 10);
+            }
+          }
+        }
+      }
+
+      .step-selector {
+        margin: 12px 0;
+      }
+    }
+  }
+}
