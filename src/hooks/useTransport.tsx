@@ -10,7 +10,7 @@ export interface TransportEvent {
 export class Transport extends EventEmitter<TransportEvent> {
     private pulseTimer: number | undefined;
     private bpm = 120;
-    private pps = 4;
+    public readonly pps = 4;
 
     public play() {
         this.startPulse();
@@ -29,7 +29,7 @@ export class Transport extends EventEmitter<TransportEvent> {
         }
         this.pulseTimer = setInterval(
             () => this.pulse(),
-            1000 * 60 / this.bpm / this.pps
+            this.getPulseLength() * 1000
         ) as any;
     }
 
@@ -47,6 +47,10 @@ export class Transport extends EventEmitter<TransportEvent> {
             // we're playing to change the timing
             this.startPulse();
         }
+    }
+
+    public getPulseLength(): number {
+        return 60 / this.bpm / this.pps;
     }
 }
 

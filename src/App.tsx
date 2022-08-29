@@ -7,8 +7,7 @@ export const App = () => {
         <div>
             <h1>SQNZ.<sub>live</sub></h1>
             <TransportControls/>
-            <Mixer>
-            </Mixer>
+            <Mixer/>
         </div>
     );
 }

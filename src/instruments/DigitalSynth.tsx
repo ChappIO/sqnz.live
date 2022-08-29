@@ -97,7 +97,9 @@ export const DigitalSynth = () => {
                                     {osc.id !== 0 && (
                                         <button onClick={() => {
                                             setOscillators(prev => prev.filter(item => item.id !== osc.id))
-                                        }}>Remove</button>
+                                        }}>
+                                            <i className="fas fa-trash"/>
+                                        </button>
                                     )}
                                 </div>
                             ))}
@@ -112,7 +114,8 @@ export const DigitalSynth = () => {
                                         volume: 100,
                                     }
                                 ]
-                            ))}>Add
+                            ))}>
+                                <i className="fas fa-plus"/>
                             </button>
                         </div>
                     </section>
@@ -142,7 +145,7 @@ export const DigitalSynth = () => {
                                 <option>No Reverb</option>
                                 {
                                     ReverbPresets.map((type) => (
-                                        <option key={type} value={type}>{type}</option>
+                                        <option key={type} value={type}>Reverb: {type}</option>
                                     ))
                                 }
                             </select>

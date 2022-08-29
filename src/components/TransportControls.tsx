@@ -29,14 +29,15 @@ export const TransportControls = () => {
 
     return (
         <div className="transport-controls">
-            <button onClick={() => {
-                if (transport.isPlaying()) {
-                    transport.stop();
-                } else {
-                    transport.play();
-                }
+            <button className={`is-danger ${transport.isPlaying() ? '' : 'active'}`} onClick={() => {
+                transport.stop();
             }}>
-                {transport.isPlaying() ? "Stop" : "Play"}
+                <i className="fas  fa-stop"/>
+            </button>
+            <button className={`is-success ${transport.isPlaying() ? 'active' : ''}`} onClick={() => {
+                transport.play();
+            }}>
+                <i className="fas  fa-play"/>
             </button>
             <Knob label={`${bpm} bpm`} min={20} max={200} value={bpm} defaultValue={120} onChange={setBpm}/>
         </div>

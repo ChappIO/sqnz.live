@@ -3,6 +3,10 @@ $white: rgb(255, 255, 255);
 $darkest: rgb(10, 10, 10);
 $darker: rgb(40, 40, 40);
 $dark: rgb(60, 60, 60);
+$light: rgb(94, 94, 94);
+$highlight: rgb(1, 148, 203);
+$success: rgb(1, 203, 82);
+$danger: rgb(203, 72, 1);
 
 // RESET
 html {
@@ -27,9 +31,66 @@ h1 {
   margin: 0;
 }
 
+button {
+  width: 36px;
+  height: 36px;
+  color: white;
+  background-color: $darkest;
+  outline: none;
+  border: 3px solid $dark;
+  border-radius: 3px;
+  cursor: pointer;
+
+  &:hover {
+    border: 3px solid $highlight;
+    box-shadow: 0 0 10px $highlight;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  &.is-danger {
+    &:hover {
+      border: 3px solid $danger;
+      box-shadow: 0 0 10px $danger;
+    }
+
+    &.active {
+      border: 3px solid $danger;
+      color: $danger;
+    }
+  }
+
+  &.is-success {
+    &:hover {
+      border: 3px solid $success;
+      box-shadow: 0 0 10px $success;
+    }
+    &.active {
+      border: 3px solid $success;
+      color: $success;
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+}
+
 // COMPONENTS
 @import "components/Instrument";
+@import "components/Keyboard";
 @import "components/Knob";
 @import "components/Mixer";
+@import "components/SequenceEditor";
 @import "components/TransportControls";
 
+// LIBS
+@import "@fortawesome/fontawesome-free/css/all.min.css";
