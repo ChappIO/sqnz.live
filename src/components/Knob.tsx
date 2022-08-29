@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import {useRateLimit} from "../hooks/useRateLimit";
 
 export interface Props {
     label: string;
@@ -21,7 +22,7 @@ export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) =>
     const rangePerPercent = (range) / 100;
     const percent = (actualValue - min) / rangePerPercent;
     const rotationDeg = Math.round(percent * 360 / 100);
-    const handleChange = onChange;
+    const handleChange = useRateLimit(100, onChange);
 
     useEffect(() => {
         const rounded = Math.round(actualValue);

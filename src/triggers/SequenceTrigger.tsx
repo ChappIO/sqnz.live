@@ -16,7 +16,11 @@ const sequence: Note[] = [
 ]
 const pulsePerStep = 4;
 
-export const SequenceTrigger = ({children}: PropsWithChildren) => {
+export interface Props {
+    onTrigger: () => void;
+}
+
+export const SequenceTrigger = ({children, onTrigger}: PropsWithChildren<Props>) => {
     const trigger = useSingleton(() => new TriggerSource());
     const transport = useTransport();
 
@@ -50,14 +54,12 @@ export const SequenceTrigger = ({children}: PropsWithChildren) => {
             return;
         }
         // trigger current note
-        const event = {
-            note: sequence[step]
-        };
-        trigger.fire('noteOn', event);
-        setTimeout(() => {
-            trigger.fire('noteOff', event)
-        }, 100);
-    }, [step, sequence, playing]);
+        trigger.fire('noteOn', {
+            note: sequence[step],
+            gateLength: 0.2,
+        });
+        onTrigger();
+    }, [step, sequence, onTrigger, playing]);
 
     return (
         <TriggerProvider source={trigger}>

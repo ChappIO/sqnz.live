@@ -7,13 +7,8 @@ import {Note} from "../music/Note";
 const useNote = (key: string, note: Note, trigger: TriggerSource) => {
     useKey('keydown', key, useCallback(() => {
         trigger.fire('noteOn', {
-            note
-        });
-    }, [trigger, note, key]));
-
-    useKey('keyup', key, useCallback(() => {
-        trigger.fire('noteOff', {
-            note
+            note,
+            gateLength: 0.2
         });
     }, [trigger, note, key]));
 }
