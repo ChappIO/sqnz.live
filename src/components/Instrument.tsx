@@ -46,7 +46,7 @@ export const Instrument = ({name, macroControls, settings, audioEngine}: Props) 
                 </div>
             </div>
             <Amplifier volume={volume}>
-                <SequenceTrigger gate={0.1}>
+                <SequenceTrigger>
                     <StealGate onGate={setTrigger}/>
                     {audioEngine}
                 </SequenceTrigger>

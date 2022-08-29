@@ -9,7 +9,7 @@ export const useAudioNode = <T extends AudioNode>(nodeCreator: (context: AudioCo
     const parentNode = useDestination();
     const self = useSingleton(() => {
         const node = nodeCreator(context);
-        console.log('created', node);
+        console.debug('created', node);
         return node;
     });
 
@@ -18,7 +18,6 @@ export const useAudioNode = <T extends AudioNode>(nodeCreator: (context: AudioCo
     useEffect(() => {
         console.debug('connect', self, 'to', parentNode);
         self.connect(parentNode);
-        console.log('done');
         return () => {
             console.debug('disconnect', self);
             self.disconnect();

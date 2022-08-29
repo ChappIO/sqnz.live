@@ -13,23 +13,15 @@ const distanceToFullRotation = 200;
 
 export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) => {
     const [lastOffset, setLastOffset] = useState<number>(0)
-    const [actualValue, setActualValue] = useState<number>(defaultValue);
+    const [actualValue, setActualValue] = useState<number>(value);
     const handle = useRef<HTMLDivElement | null>(null);
     const ghost = useRef<Element | null>(null);
     const knob = useRef<HTMLDivElement | null>(null);
     const range = max - min;
     const rangePerPercent = (range) / 100;
-    const percent = (value - min) / rangePerPercent;
+    const percent = (actualValue - min) / rangePerPercent;
     const rotationDeg = Math.round(percent * 360 / 100);
     const handleChange = onChange;
-
-    useEffect(() => {
-        setActualValue(value);
-    }, [value]);
-
-    useEffect(() => {
-        setActualValue(defaultValue);
-    }, [defaultValue]);
 
     useEffect(() => {
         const rounded = Math.round(actualValue);
@@ -41,6 +33,8 @@ export const Knob = ({label, onChange, value, max, min, defaultValue}: Props) =>
         <div className="knob" ref={knob}>
             <div className="handle" ref={handle}
                  draggable
+                 data-min={min}
+                 data-max={max}
                  data-value={value}
                  data-percent={percent}
                  data-rotate={rotationDeg}

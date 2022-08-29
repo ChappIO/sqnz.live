@@ -15,6 +15,10 @@ export const DigitalSynth = () => {
         }
     ]);
     const [reverbPreset, setReverbPreset] = useState<ReverbPreset | undefined>();
+    const [attack, setAttack] = useState(2);
+    const [decay, setDecay] = useState(2);
+    const [sustain, setSustain] = useState(1000);
+    const [release, setRelease] = useState(2);
 
     return (
         <Instrument
@@ -44,6 +48,8 @@ export const DigitalSynth = () => {
                                             }>
                                         <option value="sine">Sine</option>
                                         <option value="triangle">Triangle</option>
+                                        <option value="square">Square</option>
+                                        <option value="sawtooth">Saw</option>
                                     </select>
                                     <div className="knobs">
                                         <Knob label={`tune ${osc.tune}`} min={-24} max={24} value={osc.tune}
@@ -85,6 +91,19 @@ export const DigitalSynth = () => {
                         </div>
                     </section>
                     <section>
+                        <h3>Envelope</h3>
+                        <div className="section-content">
+                            <div className="knobs">
+                                <Knob label="attack" min={0} max={1000} value={attack} defaultValue={20} onChange={setAttack}/>
+                                <Knob label="decay" min={0} max={1000} value={decay} defaultValue={20} onChange={setDecay}/>
+                            </div>
+                            <div className="knobs">
+                                <Knob label="sustain" min={0} max={1000} value={sustain} defaultValue={1000} onChange={setSustain}/>
+                                <Knob label="release" min={0} max={1000} value={release} defaultValue={20} onChange={setRelease}/>
+                            </div>
+                        </div>
+                    </section>
+                    <section>
                         <h3>FX</h3>
                         <div className="section-content">
                             <select value={reverbPreset} onChange={e => {
@@ -104,7 +123,7 @@ export const DigitalSynth = () => {
             audioEngine={
                 <>
                     <Reverb preset={reverbPreset}>
-                        <EnvelopeADSR attack={0.02} decay={0.1} sustain={0.4} release={0.3}>
+                        <EnvelopeADSR attack={attack / 1000} decay={decay / 1000} sustain={sustain / 1000} release={release / 1000}>
                             <Amplifier volume={100 / oscillators.length}>
                                 {oscillators.map((osc, i) => (
                                     <Oscillator key={i} {...osc}/>

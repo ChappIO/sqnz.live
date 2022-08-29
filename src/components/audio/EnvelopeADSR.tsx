@@ -21,10 +21,11 @@ export const EnvelopeADSR = ({attack, decay, sustain, release, children}: PropsW
                 amp.gain.setTargetAtTime(sustain, context.currentTime + attack, decay);
             }),
             trigger.addEventListener('gateClose', () => {
+                amp.gain.cancelScheduledValues(context.currentTime);
                 amp.gain.setTargetAtTime(0, context.currentTime, release);
             })
         );
-    }, [trigger, amp]);
+    }, [trigger, amp, attack, decay, sustain, release]);
 
     useEffect(() => {
         amp.gain.setValueAtTime(0, context.currentTime);
