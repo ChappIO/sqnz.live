@@ -1,4 +1,4 @@
-# SQNZ.$_{live}$
+# SQNZ.<sub>live</sub>
 
 A digital synthesizer groovebox in your browser!
 
