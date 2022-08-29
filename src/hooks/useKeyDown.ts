@@ -14,5 +14,5 @@ export const useKey = (direction: 'keyup' | 'keydown', key: string, trigger: () 
         }
         document.addEventListener(direction, listener);
         return () => document.removeEventListener(direction, listener);
-    }, [trigger]);
+    }, [trigger, direction, key]);
 }

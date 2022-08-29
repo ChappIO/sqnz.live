@@ -25,7 +25,7 @@ export const EnvelopeADSR = ({attack, decay, sustain, release, children}: PropsW
                 amp.gain.setTargetAtTime(0, context.currentTime, release);
             })
         );
-    }, [trigger, amp, attack, decay, sustain, release]);
+    }, [trigger, context, amp, attack, decay, sustain, release]);
 
     useEffect(() => {
         amp.gain.setValueAtTime(0, context.currentTime);

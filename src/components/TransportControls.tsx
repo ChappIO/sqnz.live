@@ -25,7 +25,7 @@ export const TransportControls = () => {
             transport.addEventListener('play', () => reload()),
             transport.addEventListener('stop', () => reload())
         )
-    }, [transport]);
+    }, [transport, reload]);
 
     return (
         <div className="transport-controls">

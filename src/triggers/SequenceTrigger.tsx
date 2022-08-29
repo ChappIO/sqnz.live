@@ -42,11 +42,11 @@ export const SequenceTrigger = ({children, onTrigger}: PropsWithChildren<Props>)
                 setPulse(prev => (prev + 1) % (pulsePerStep * sequence.length));
             })
         );
-    }, [transport, pulsePerStep]);
+    }, [transport]);
 
     useEffect(() => {
         setStep(Math.floor(pulse / pulsePerStep));
-    }, [pulse, pulsePerStep]);
+    }, [pulse]);
 
 
     useEffect(() => {
@@ -59,7 +59,7 @@ export const SequenceTrigger = ({children, onTrigger}: PropsWithChildren<Props>)
             gateLength: 0.2,
         });
         onTrigger();
-    }, [step, sequence, onTrigger, playing]);
+    }, [step, trigger, onTrigger, playing]);
 
     return (
         <TriggerProvider source={trigger}>
