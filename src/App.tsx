@@ -1,13 +1,30 @@
-import React from 'react';
-import {Mixer} from "./components/Mixer";
-import {TransportControls} from "./components/TransportControls";
+import {useHotkey} from "./hooks/useHotkey";
+import {useState} from "react";
+import {Header} from "./components/Header";
+import {TrackProvider} from "./hooks/useTrack";
 
 export const App = () => {
+    const [screen, setScreen] = useState<'sequencer' | 'instrument' | 'fx' | 'mixer' | 'master_fx'>('sequencer');
+
+    useHotkey('Digit1', () => {
+        setScreen('sequencer');
+    });
+    useHotkey('Digit2', () => {
+        setScreen('instrument');
+    });
+    useHotkey('Digit3', () => {
+        setScreen('fx');
+    });
+    useHotkey('Digit4', () => {
+        setScreen('mixer');
+    });
+    useHotkey('Digit5', () => {
+        setScreen('master_fx');
+    });
     return (
-        <div>
-            <h1>SQNZ.<sub>live</sub></h1>
-            <TransportControls/>
-            <Mixer/>
-        </div>
+        <TrackProvider>
+            <Header/>
+            {screen}
+        </TrackProvider>
     );
 }
