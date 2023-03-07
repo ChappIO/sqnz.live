@@ -43,7 +43,7 @@ export const Piano = <T extends {}>({onNoteStart, onNotePitch, onNoteStop, baseN
                          onTouchMove={(e: TouchEvent) => {
                              for (let i = 0; i < e.changedTouches.length; i++) {
                                  const t = e.changedTouches[i];
-                                 const touch = notes.filter(n => n.touchId == t.identifier)[0];
+                                 const touch = notes.filter(n => n.touchId === t.identifier)[0];
                                  if (!touch) {
                                      continue;
                                  }
@@ -57,7 +57,7 @@ export const Piano = <T extends {}>({onNoteStart, onNotePitch, onNoteStop, baseN
                          onTouchEnd={(e: TouchEvent) => {
                              for (let i = 0; i < e.changedTouches.length; i++) {
                                  const t = e.changedTouches[i];
-                                 const touch = notes.filter(n => n.touchId == t.identifier)[0];
+                                 const touch = notes.filter(n => n.touchId === t.identifier)[0];
                                  if (!touch) {
                                      continue;
                                  }
