@@ -1,0 +1,28 @@
+.Piano {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  aspect-ratio: 5;
+
+  $keySize: 50px;
+  border: 2px solid black;
+
+  .key {
+    height: $keySize;
+    flex-grow: 0;
+    flex-shrink: 0;
+    background-color: white;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 12px;
+    border: 2px solid black;
+
+    &.black {
+      position: relative;
+      background-color: black;
+      color: white;
+      z-index: 2;
+    }
+  }
+}

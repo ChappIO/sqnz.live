@@ -1,0 +1,21 @@
+.Expresso {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+
+  .Synth {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    .Controls {
+      display: flex;
+
+      button {
+        display: block;
+        padding: 0;
+        margin: 3px;
+      }
+    }
+  }
+}
