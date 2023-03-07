@@ -16,6 +16,7 @@ export function useSingleton<T>(creator: () => T, effect?: (thing: T) => void, d
         if (effect) {
             effect(current);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [current, effect, ...(dependencies || [])]);
 
     return ref.current;
