@@ -6,6 +6,7 @@
   background-color: rgba(black, 0.03);
 
   .Backdrop {
+    user-select: none;
     z-index: -100;
     position: fixed;
     opacity: 0.1;

@@ -1,9 +1,9 @@
 import {Node} from "./Node";
 import {ReactNode} from "react";
 
-export class SpeakerNode extends Node {
+export class AddNewNodeNode extends Node {
     renderNode(): ReactNode {
-        return <i className="fas fa-volume-high"/>;
+        return <i className="fas fa-plus"/>;
     }
 
 }
