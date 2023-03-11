@@ -67,8 +67,8 @@ export abstract class Node<P extends NodeProps = NodeProps, S extends NodeState 
         if (e.targetTouches.length === 1) {
             const touch = e.targetTouches[0];
             this.setState({
-                posX: touch.clientX - e.currentTarget.clientWidth / 2,
-                posY: touch.clientY - e.currentTarget.clientHeight / 2
+                posX: touch.pageX - e.currentTarget.clientWidth / 2,
+                posY: touch.pageY - e.currentTarget.clientHeight / 2
             })
         }
     }
