@@ -1,23 +1,31 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 
-const NO_INIT = Symbol('No Value Initialized');
+const NO_INIT = Symbol("No Value Initialized");
 
-export function useSingleton<T>(creator: () => T): T
-export function useSingleton<T>(creator: () => T, effect: (thing: T) => void, dependencies: any[]): T
-export function useSingleton<T>(creator: () => T, effect?: (thing: T) => void, dependencies?: any[]): T {
-    const ref = useRef<T | typeof NO_INIT>(NO_INIT);
+export function useSingleton<T>(creator: () => T): T;
+export function useSingleton<T>(
+  creator: () => T,
+  effect: (thing: T) => void,
+  dependencies: any[]
+): T;
+export function useSingleton<T>(
+  creator: () => T,
+  effect?: (thing: T) => void,
+  dependencies?: any[]
+): T {
+  const ref = useRef<T | typeof NO_INIT>(NO_INIT);
 
-    if (ref.current === NO_INIT) {
-        ref.current = creator();
+  if (ref.current === NO_INIT) {
+    ref.current = creator();
+  }
+  const current = ref.current;
+
+  useEffect(() => {
+    if (effect) {
+      effect(current);
     }
-    const current = ref.current;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, effect, ...(dependencies || [])]);
 
-    useEffect(() => {
-        if (effect) {
-            effect(current);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [current, effect, ...(dependencies || [])]);
-
-    return ref.current;
+  return ref.current;
 }
