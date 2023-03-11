@@ -1,4 +1,4 @@
-import {Component, DragEvent, ReactNode} from "react";
+import {Component, ReactNode, TouchEvent} from "react";
 import './Node.scss';
 
 export interface NodeProps {
@@ -24,7 +24,8 @@ export abstract class Node<P extends NodeProps = NodeProps, S extends NodeState 
             ...state,
         };
 
-        this.onDragEnd = this.onDragEnd.bind(this);
+        this.onTouchMove = this.onTouchMove.bind(this);
+        this.onTouchEnd = this.onTouchEnd.bind(this);
     }
 
     static getDerivedStateFromProps(props: NodeProps) {
@@ -41,21 +42,10 @@ export abstract class Node<P extends NodeProps = NodeProps, S extends NodeState 
     abstract renderNode(): ReactNode | undefined;
 
     public render() {
-        console.log('hi');
         return (
             <button className="Node"
-                    onTouchMove={(e) => {
-                        if (e.targetTouches.length === 1) {
-                            const touch = e.targetTouches[0];
-                            this.setState({
-                                posX: touch.clientX - e.currentTarget.clientWidth / 2,
-                                posY: touch.clientY - e.currentTarget.clientHeight / 2
-                            })
-                        }
-                    }}
-                    onTouchEnd={() => {
-                        this.save();
-                    }}
+                    onTouchMove={this.onTouchMove}
+                    onTouchEnd={this.onTouchEnd}
                     style={{
                         transform: `translate(${this.state.posX}px, ${this.state.posY}px)`
                     }}
@@ -65,20 +55,21 @@ export abstract class Node<P extends NodeProps = NodeProps, S extends NodeState 
         );
     }
 
+    protected onTouchEnd() {
+        this.save();
+    }
+
     protected save() {
         localStorage.setItem(`node.${this.props.id}`, JSON.stringify(this.state));
     }
 
-    private onDragEnd(e: DragEvent) {
-        this.setState(prev => ({
-            posY: e.pageY,
-            posX: e.pageX,
-        }))
-        console.log({
-            posX: this.state.posX,
-            posY: this.state.posY,
-            pageX: e.pageX,
-            pageY: e.pageY,
-        });
+    private onTouchMove(e: TouchEvent) {
+        if (e.targetTouches.length === 1) {
+            const touch = e.targetTouches[0];
+            this.setState({
+                posX: touch.clientX - e.currentTarget.clientWidth / 2,
+                posY: touch.clientY - e.currentTarget.clientHeight / 2
+            })
+        }
     }
 }
