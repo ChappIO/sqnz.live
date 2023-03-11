@@ -6,6 +6,7 @@ import {ConnectionType, NodeProps} from "../nodes/Node";
 import {uuid} from "../utils/uuid";
 import {WaveNode} from "../nodes/WaveNode";
 import {useForceUpdate} from "../hooks/useForceUpdate";
+import {ReverbNode} from "../nodes/ReverbNode";
 
 interface NodeSettings {
     component: any;
@@ -32,7 +33,16 @@ const Nodes: { [key: string]: NodeSettings } = {
         outputs: [
             'audio'
         ],
-    }
+    },
+    reverb: {
+        component: ReverbNode,
+        inputs: [
+            'audio'
+        ],
+        outputs: [
+            'audio'
+        ]
+    },
 }
 
 interface NodeDescription extends Partial<NodeProps> {
@@ -41,6 +51,7 @@ interface NodeDescription extends Partial<NodeProps> {
 }
 
 interface ConnectionDescription {
+    id: string;
     from: string;
     to: string;
     type: ConnectionType;
@@ -85,14 +96,24 @@ export const SketchPage = () => {
         console.debug(`Matching types: ${commonTypes}`);
 
         // TODO: Prompt for connection type?
-        setConnections(prev => ([
-            ...prev,
-            ...commonTypes.map(type => ({
-                from,
-                to,
-                type
-            }))
-        ]));
+        const chosenType = commonTypes[0];
+        if (!chosenType) {
+            return;
+        }
+        const connection: ConnectionDescription = {
+            id: `${chosenType}-${from}-${to}`,
+            from,
+            to,
+            type: chosenType
+        }
+        // toggle connection
+        setConnections(prev => {
+            if (prev.some(c => c.id === connection.id)) {
+                return prev.filter(c => c.id !== connection.id);
+            } else {
+                return [...prev, connection];
+            }
+        });
     }
 
     return (
@@ -108,6 +129,20 @@ export const SketchPage = () => {
                                     {
                                         id: uuid(),
                                         type: 'wave'
+                                    }
+                                ]);
+                            }}
+                            inputs={[]}
+                            outputs={[]}
+            />
+            <AddNewNodeNode id="new"
+                            fixedX={72}
+                            fixedY={12}
+                            onTap={() => {
+                                setNodes(prev => [...prev,
+                                    {
+                                        id: uuid(),
+                                        type: 'reverb'
                                     }
                                 ]);
                             }}
@@ -157,12 +192,11 @@ export const SketchPage = () => {
                             x: toRect.left + toRect.width / 2,
                             y: toRect.top + toRect.height / 2
                         }
-                        return <line
-                            key={`${connection.type}-${connection.from}-${connection.to}`}
-                            x1={fromSideConnect.x}
-                            y1={fromSideConnect.y}
-                            x2={toSideConnect.x}
-                            y2={toSideConnect.y}
+                        const droopyness = 100;
+                        return <path
+                            key={connection.id}
+                            d={`M${fromSideConnect.x} ${fromSideConnect.y} C${fromSideConnect.x} ${fromSideConnect.y + droopyness}, ${toSideConnect.x} ${toSideConnect.y + droopyness}, ${toSideConnect.x} ${toSideConnect.y}`}
+                            fill="transparent"
                             stroke="black"
                             strokeWidth={2}
                         />

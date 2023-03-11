@@ -1,4 +1,13 @@
-import {createContext, Dispatch, PropsWithChildren, SetStateAction, useContext, useEffect, useState} from "react";
+import {
+    createContext,
+    Dispatch,
+    PropsWithChildren,
+    SetStateAction,
+    useCallback,
+    useContext,
+    useEffect,
+    useState
+} from "react";
 
 type Register = Record<string, AudioNode>;
 
@@ -29,6 +38,12 @@ export const useRegisterAudioNode = (key: string, node: AudioNode) => {
         };
     }, [key, node, setRegister]);
 };
+
+export const useGetAudioNode = () => {
+    const [register] = useContext(Context);
+
+    return useCallback((key: string): AudioNode | undefined => register[key], [register]);
+}
 
 export const useAudioNode = (key: string | undefined): AudioNode | undefined => {
     const [register] = useContext(Context);

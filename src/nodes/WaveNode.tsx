@@ -1,34 +1,36 @@
 import {Node, NodeProps} from "./Node";
-import {useSingleton} from "../hooks/useSingleton";
 import {useAudioContext} from "../hooks/useAudioContext";
-import {useAudioNode} from "../hooks/useAudioNodeRegister";
+import {useGetAudioNode} from "../hooks/useAudioNodeRegister";
 
 export interface Props extends NodeProps {
 
 }
 
-export const WaveNode = ({...nodeProps}: NodeProps) => {
-    const destination = useAudioNode(nodeProps.outputs.find(i => i.type === 'audio')?.to);
-
+export const WaveNode = ({onTap, ...nodeProps}: NodeProps) => {
+    const destinations = nodeProps.outputs.filter(o => o.type === 'audio').map(o => o.to);
+    const getAudioNode = useGetAudioNode();
     const context = useAudioContext();
-    useSingleton(() => {
-            const osc = context.createOscillator();
-            osc.frequency.setValueAtTime(440, context.currentTime);
-            osc.start();
-            return osc;
-        },
-        (osc) => {
-            if (!destination) {
-                osc.disconnect();
-            } else {
-                osc.connect(destination);
-            }
-        },
-        [destination]
-    );
 
     return (
-        <Node {...nodeProps}>
+        <Node {...nodeProps} onTap={() => {
+            if (onTap) {
+                onTap();
+            }
+            const gain = context.createGain();
+            destinations.forEach(key => {
+                const destination = getAudioNode(key);
+                if (destination) {
+                    gain.connect(destination);
+                }
+            });
+            const osc = context.createOscillator();
+            osc.connect(gain);
+            osc.start();
+
+            setTimeout(() => {
+                gain.gain.setTargetAtTime(0, context.currentTime, 0.01);
+            }, 500);
+        }}>
             <i className="fas fa-wave-square"/>
         </Node>
     )
