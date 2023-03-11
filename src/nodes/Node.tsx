@@ -2,6 +2,8 @@ import {PropsWithChildren, TouchEvent} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
 
+export type ConnectionType = 'audio';
+
 export interface NodeProps {
     id: string;
     initialX?: number;
@@ -9,6 +11,16 @@ export interface NodeProps {
     fixedX?: number;
     fixedY?: number;
     onTap?: () => void;
+    onConnect?: (e: { from: string, to: string }) => void;
+    onMoved?: () => void;
+    inputs: {
+        type: ConnectionType,
+        from: string,
+    }[];
+    outputs: {
+        type: ConnectionType,
+        to: string,
+    }[];
 }
 
 function findNodeId(element: HTMLElement | null | undefined): string | undefined {
@@ -18,7 +30,17 @@ function findNodeId(element: HTMLElement | null | undefined): string | undefined
     return element.dataset.nodeid || findNodeId(element.parentElement);
 }
 
-export const Node = ({id, fixedX, fixedY, initialX, initialY, onTap, children}: PropsWithChildren<NodeProps>) => {
+export const Node = ({
+                         id,
+                         fixedX,
+                         fixedY,
+                         initialX,
+                         initialY,
+                         onTap,
+                         onConnect,
+                         onMoved,
+                         children
+                     }: PropsWithChildren<NodeProps>) => {
     const [posX, setPosX] = usePersistedState('posX', fixedX || initialX || window.innerWidth / 2, {
         namespace: `nodes/${id}`,
         debounce: 1000,
@@ -35,7 +57,9 @@ export const Node = ({id, fixedX, fixedY, initialX, initialY, onTap, children}: 
             const from = findNodeId(e.touches[0].target as HTMLElement);
             const to = findNodeId(e.touches[1].target as HTMLElement);
             if (to === id && from) {
-                console.debug(`Connect ${from} -> ${to}`);
+                if (onConnect) {
+                    onConnect({from, to});
+                }
             }
         }
     }
@@ -50,6 +74,9 @@ export const Node = ({id, fixedX, fixedY, initialX, initialY, onTap, children}: 
             const target = e.currentTarget as HTMLElement;
             setPosX(touch.pageX - target.clientWidth / 2);
             setPosY(touch.pageY - target.clientHeight / 2);
+            if (onMoved) {
+                onMoved();
+            }
         }
     }
 
@@ -58,6 +85,7 @@ export const Node = ({id, fixedX, fixedY, initialX, initialY, onTap, children}: 
 
     return (
         <button data-nodeid={id}
+                id={id}
                 className="Node"
                 style={{
                     transform: `translate(${x}px, ${y}px)`
