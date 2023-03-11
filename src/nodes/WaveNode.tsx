@@ -1,8 +1,13 @@
-import {Node} from "./Node";
-import {ReactNode} from "react";
+import {Node, NodeProps} from "./Node";
 
-export class WaveNode extends Node {
-    renderNode(): ReactNode {
-        return <i className="fas fa-wave-square"/>;
-    }
+export interface Props extends NodeProps {
+
+}
+
+export const WaveNode = ({...nodeProps}: NodeProps) => {
+    return (
+        <Node {...nodeProps}>
+            <i className="fas fa-wave-square"/>
+        </Node>
+    )
 }

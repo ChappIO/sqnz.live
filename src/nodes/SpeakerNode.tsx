@@ -1,9 +1,13 @@
-import {Node} from "./Node";
-import {ReactNode} from "react";
+import {Node, NodeProps} from "./Node";
 
-export class SpeakerNode extends Node {
-    renderNode(): ReactNode {
-        return <i className="fas fa-volume-high"/>;
-    }
+export interface Props extends NodeProps {
 
+}
+
+export const SpeakerNode = ({...nodeProps}: NodeProps) => {
+    return (
+        <Node {...nodeProps}>
+            <i className="fas fa-volume-high"/>
+        </Node>
+    )
 }
