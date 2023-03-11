@@ -1,0 +1,16 @@
+.SketchPage {
+  width: 100vw;
+  height: 100vh;
+  overflow: scroll;
+
+  .Backdrop {
+    z-index: -100;
+    position: fixed;
+    opacity: 0.1;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+  }
+}

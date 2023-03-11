@@ -4,11 +4,4 @@
   box-sizing: border-box;
 }
 
-body {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-  touch-action: none;
-  background-color: #282828;
-  font-family: monospace;
-}
+@import "~papercss/dist/paper.min.css";
