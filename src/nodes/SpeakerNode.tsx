@@ -1,4 +1,4 @@
-import {Node, NodeProps} from "./Node";
+import {CustomNode, Node, NodeProps} from "./Node";
 import React, {useEffect} from "react";
 import {useAudioContext} from "../hooks/useAudioContext";
 import {useSingleton} from "../hooks/useSingleton";
@@ -10,7 +10,7 @@ export interface Props extends NodeProps {
 
 }
 
-export const SpeakerNode = ({...nodeProps}: NodeProps) => {
+export const SpeakerNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const context = useAudioContext();
     const output = useSingleton(() => context.destination);
     const gain = useSingleton(
@@ -32,7 +32,7 @@ export const SpeakerNode = ({...nodeProps}: NodeProps) => {
     }, [gain, volume, context]);
 
     return (
-        <Node {...nodeProps} icon="fa-volume-high" name="Speaker">
+        <Node {...nodeProps} icon={SpeakerNode.icon} name={SpeakerNode.displayName}>
             <div className="form-group">
                 <label htmlFor="volume"
                        onClick={() => {
@@ -56,3 +56,9 @@ export const SpeakerNode = ({...nodeProps}: NodeProps) => {
         </Node>
     )
 }
+
+SpeakerNode.displayName = 'Speaker'
+SpeakerNode.icon = 'fa-volume-high';
+SpeakerNode.inputs = [
+    'audio'
+];

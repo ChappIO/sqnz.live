@@ -1,51 +1,31 @@
 import './SketchPage.scss';
 import {SpeakerNode} from "../nodes/SpeakerNode";
 import {AddNewNodeNode} from "../nodes/AddNewNodeNode";
-import {ConnectionType, NodeProps} from "../nodes/Node";
-import {uuid} from "../utils/uuid";
+import {ConnectionType, CustomNode, NodeProps} from "../nodes/Node";
 import {WaveNode} from "../nodes/WaveNode";
 import {useForceUpdate} from "../hooks/useForceUpdate";
 import {ReverbNode} from "../nodes/ReverbNode";
 import {useProject} from "../hooks/useProject";
 import {usePersistedState} from "../hooks/usePersistedState";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {Modal} from "../components/Modal";
+import {uuid} from "../utils/uuid";
 
-interface NodeSettings {
-    component: any;
-    inputs: ConnectionType[];
-    outputs: ConnectionType[];
+const Nodes: { [key: string]: CustomNode } = {
+    speaker: SpeakerNode,
+    new: AddNewNodeNode,
+    wave: WaveNode,
+    reverb: ReverbNode,
 }
 
-const Nodes: { [key: string]: NodeSettings } = {
-    speaker: {
-        component: SpeakerNode,
-        inputs: [
-            'audio'
-        ],
-        outputs: []
-    },
-    new: {
-        component: AddNewNodeNode,
-        inputs: [],
-        outputs: [],
-    },
-    wave: {
-        component: WaveNode,
-        inputs: [],
-        outputs: [
-            'audio'
-        ],
-    },
-    reverb: {
-        component: ReverbNode,
-        inputs: [
-            'audio'
-        ],
-        outputs: [
-            'audio'
-        ]
-    },
-}
+const NodesByCategory = Object.values(Nodes).reduce(
+    (grouped: Record<string, CustomNode[]>, node: CustomNode) => {
+        if (node.category) {
+            (grouped[node.category] = grouped[node.category] || []).push(node);
+        }
+        return grouped;
+    }, {}
+);
 
 interface NodeDescription extends Partial<NodeProps> {
     id: string;
@@ -68,6 +48,7 @@ export const SketchPage = () => {
         namespace: project.namespace
     });
     const forceUpdate = useForceUpdate();
+    const [addNodeModal, setAddNodeModal] = useState(false);
 
     // Force reload after first pass to generate initial connections
     useEffect(() => {
@@ -100,8 +81,8 @@ export const SketchPage = () => {
         }
         const fromNodeSettings = Nodes[fromNode.type];
         const toNodeSettings = Nodes[toNode.type];
-        const commonTypes = fromNodeSettings.outputs.filter(value => toNodeSettings.inputs.includes(value));
-        if (commonTypes.length === 0) {
+        const commonTypes = fromNodeSettings.outputs?.filter(value => toNodeSettings.inputs?.includes(value));
+        if (!commonTypes?.length) {
             // Nothing to connect
             return;
         }
@@ -152,26 +133,7 @@ export const SketchPage = () => {
                             fixedX={12}
                             fixedY={12}
                             onTap={() => {
-                                setNodes(prev => [...prev,
-                                    {
-                                        id: uuid(),
-                                        type: 'wave'
-                                    }
-                                ]);
-                            }}
-                            inputs={[]}
-                            outputs={[]}
-            />
-            <AddNewNodeNode id="new"
-                            fixedX={72}
-                            fixedY={12}
-                            onTap={() => {
-                                setNodes(prev => [...prev,
-                                    {
-                                        id: uuid(),
-                                        type: 'reverb'
-                                    }
-                                ]);
+                                setAddNodeModal(true);
                             }}
                             inputs={[]}
                             outputs={[]}
@@ -185,8 +147,7 @@ export const SketchPage = () => {
                          onMoved={forceUpdate}
             />
             {nodes.map(node => {
-                const settings = Nodes[node.type];
-                const Component = settings.component;
+                const Component = Nodes[node.type];
                 const inputs = connections.filter(connection =>
                     connection.to === node.id
                 );
@@ -231,6 +192,30 @@ export const SketchPage = () => {
                     })
                 }
             </svg>
+            {addNodeModal && (
+                <Modal title="Add" onClose={() => setAddNodeModal(false)}>
+                    {Object.entries(NodesByCategory).map(([category, nodes]) => (
+                        <div key={category}>
+                            <h5>{category}</h5>
+                            <div className="buttons" style={{marginBottom: 12}}>
+                                {nodes.map(node => (
+                                    <button key={node.displayName} onClick={() => {
+                                        const Node = node;
+                                        const id = uuid();
+                                        setNodes(prev => [...prev, {
+                                            id,
+                                            type: Object.entries(Nodes).filter(([, search]) => Node === search)[0][0]
+                                        }]);
+                                        setAddNodeModal(false);
+                                    }}>
+                                        <span><i className={`fas ${node.icon}`}/> {node.displayName}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </Modal>
+            )}
         </div>
     )
 }

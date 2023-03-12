@@ -5,6 +5,12 @@
 
   .modal-body {
     top: 50%;
+
+    .modal-content {
+      max-height: 60vh;
+      overflow-y: scroll;
+      margin-bottom: 12px;
+    }
   }
 
   .buttons {

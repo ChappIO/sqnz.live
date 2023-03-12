@@ -1,4 +1,4 @@
-import {Node, NodeProps} from "./Node";
+import {CustomNode, Node, NodeProps} from "./Node";
 import {useSingleton} from "../hooks/useSingleton";
 import {useAudioContext} from "../hooks/useAudioContext";
 import {useGetAudioNode, useRegisterAudioNode} from "../hooks/useAudioNodeRegister";
@@ -54,7 +54,7 @@ export interface Props extends NodeProps {
 
 }
 
-export const ReverbNode = ({...nodeProps}: NodeProps) => {
+export const ReverbNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const project = useProject();
     const destinations = useMemo(() => nodeProps.outputs.filter(o => o.type === 'audio').map(o => o.to), [nodeProps.outputs]);
     const getAudioNode = useGetAudioNode();
@@ -105,7 +105,7 @@ export const ReverbNode = ({...nodeProps}: NodeProps) => {
     }, [convolver, destinations, connectedTo, getAudioNode]);
 
     return (
-        <Node {...nodeProps} icon="fa-explosion" name="Reverb">
+        <Node {...nodeProps} icon={ReverbNode.icon} name={ReverbNode.displayName}>
             <div className="form-group">
                 <label htmlFor="preset">Preset</label>
                 <select id="preset" value={preset} onChange={(e) => setPreset(e.target.value as any)}>
@@ -117,3 +117,13 @@ export const ReverbNode = ({...nodeProps}: NodeProps) => {
         </Node>
     )
 }
+
+ReverbNode.displayName = 'Reverb';
+ReverbNode.category = 'Effects';
+ReverbNode.icon = 'fa-explosion';
+ReverbNode.inputs = [
+    'audio'
+];
+ReverbNode.outputs = [
+    'audio'
+];

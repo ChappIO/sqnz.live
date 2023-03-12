@@ -1,4 +1,4 @@
-import {PropsWithChildren, ReactElement, TouchEvent, useState} from "react";
+import {FC, PropsWithChildren, ReactElement, TouchEvent, useState} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
@@ -7,9 +7,8 @@ import {Modal} from "../components/Modal";
 export type ConnectionType = 'audio';
 
 export interface SpecificNodeProps {
-    icon: string;
-    name: string;
-
+    icon?: string;
+    name?: string;
     modalActions?: ReactElement
 }
 
@@ -38,6 +37,13 @@ function findNodeId(element: HTMLElement | null | undefined): string | undefined
         return undefined;
     }
     return element.dataset.nodeid || findNodeId(element.parentElement);
+}
+
+export type CustomNode = FC<NodeProps> & {
+    inputs?: ConnectionType[];
+    outputs?: ConnectionType[];
+    icon?: string;
+    category?: 'Generators' | 'Effects' | 'Triggers';
 }
 
 export const Node = ({
