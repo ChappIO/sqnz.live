@@ -14,7 +14,7 @@ export const Modal = ({title, onClose, children}: PropsWithChildren<Props>) => {
             <div className="modal-body">
                 <span className="btn-close" onClick={onClose}>X</span>
                 <h4 className="modal-title">{title}</h4>
-                <h5 className="modal-subtitle"></h5>
+                <h5 className="modal-subtitle">{''}</h5>
                 <div className="modal-content">
                     {children}
                 </div>

@@ -50,9 +50,6 @@ export enum ReverbFiles {
 
 export type ReverbPreset = keyof typeof ReverbFiles;
 
-export interface Props extends NodeProps {
-
-}
 
 export const ReverbNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const project = useProject();
@@ -105,7 +102,7 @@ export const ReverbNode: CustomNode = ({...nodeProps}: NodeProps) => {
     }, [convolver, destinations, connectedTo, getAudioNode]);
 
     return (
-        <Node {...nodeProps} icon={ReverbNode.icon} name={ReverbNode.displayName}>
+        <Node {...nodeProps} node={ReverbNode}>
             <div className="form-group">
                 <label htmlFor="preset">Preset</label>
                 <select id="preset" value={preset} onChange={(e) => setPreset(e.target.value as any)}>

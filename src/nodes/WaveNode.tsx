@@ -4,10 +4,6 @@ import {useGetAudioNode} from "../hooks/useAudioNodeRegister";
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
 
-export interface Props extends NodeProps {
-
-}
-
 export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const project = useProject();
     const [waveform, setWaveform] = usePersistedState<OscillatorType>('waveform', 'sine', {
@@ -41,8 +37,7 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
 
     return (
         <Node {...nodeProps}
-              icon={WaveNode.icon}
-              name={WaveNode.displayName}
+              node={WaveNode}
               modalActions={<>
                   <button className="btn-success" onClick={playNote}>
                       Test <i className="fas fa-play"/>
@@ -89,6 +84,9 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
 WaveNode.displayName = 'Wave'
 WaveNode.icon = 'fa-wave-square'
 WaveNode.category = 'Generators';
+WaveNode.inputs = [
+    'note'
+];
 WaveNode.outputs = [
     'audio'
 ];

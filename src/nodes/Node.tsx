@@ -4,12 +4,11 @@ import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
 import {Modal} from "../components/Modal";
 
-export type ConnectionType = 'audio';
+export type ConnectionType = 'audio' | 'note';
 
 export interface SpecificNodeProps {
-    icon?: string;
-    name?: string;
     modalActions?: ReactElement
+    node: CustomNode;
 }
 
 export interface NodeProps {
@@ -56,10 +55,9 @@ export const Node = ({
                          onConnect,
                          onMoved,
                          onDelete,
-                         icon,
-                         name,
                          children,
                          modalActions,
+                         node,
                      }: PropsWithChildren<NodeProps & SpecificNodeProps>) => {
     const project = useProject();
     const [posX, setPosX] = usePersistedState('posX', fixedX || initialX || window.innerWidth / 2, {
@@ -126,10 +124,11 @@ export const Node = ({
                     onTouchEndCapture={onTouchEnd}
                     onClick={onClick}
             >
-                <i className={`fas ${icon}`}/>
+                <i className={`fas ${node.icon}`}/>
             </button>
             {showDetails && (
-                <Modal title={<><i className={`fas ${icon}`}/> {name}</>} onClose={() => setShowDetails(false)}>
+                <Modal title={<><i className={`fas ${node.icon}`}/> {node.displayName}</>}
+                       onClose={() => setShowDetails(false)}>
                     {children}
 
                     <div className="buttons">

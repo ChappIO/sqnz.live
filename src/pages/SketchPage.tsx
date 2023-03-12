@@ -10,10 +10,12 @@ import {usePersistedState} from "../hooks/usePersistedState";
 import {useEffect, useState} from "react";
 import {Modal} from "../components/Modal";
 import {uuid} from "../utils/uuid";
+import {ThereminNode} from "../nodes/ThereminNode";
 
 const Nodes: { [key: string]: CustomNode } = {
     speaker: SpeakerNode,
     new: AddNewNodeNode,
+    theremin: ThereminNode,
     wave: WaveNode,
     reverb: ReverbNode,
 }

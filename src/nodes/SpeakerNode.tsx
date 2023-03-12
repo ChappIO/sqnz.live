@@ -6,10 +6,6 @@ import {useRegisterAudioNode} from "../hooks/useAudioNodeRegister";
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
 
-export interface Props extends NodeProps {
-
-}
-
 export const SpeakerNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const context = useAudioContext();
     const output = useSingleton(() => context.destination);
@@ -32,7 +28,7 @@ export const SpeakerNode: CustomNode = ({...nodeProps}: NodeProps) => {
     }, [gain, volume, context]);
 
     return (
-        <Node {...nodeProps} icon={SpeakerNode.icon} name={SpeakerNode.displayName}>
+        <Node {...nodeProps} node={SpeakerNode}>
             <div className="form-group">
                 <label htmlFor="volume"
                        onClick={() => {
