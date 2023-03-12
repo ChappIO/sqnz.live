@@ -1,0 +1,25 @@
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+  touch-action: none;
+
+  .modal-body {
+    top: 50%;
+
+    .modal-content {
+      max-height: 60vh;
+      margin-bottom: 12px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+
+    button, .paper-btn, [type=button] {
+      margin: 0;
+    }
+  }
+}
