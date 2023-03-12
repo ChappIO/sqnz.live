@@ -1,6 +1,7 @@
 import {PropsWithChildren, TouchEvent} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
+import {useProject} from "../hooks/useProject";
 
 export type ConnectionType = 'audio';
 
@@ -41,12 +42,13 @@ export const Node = ({
                          onMoved,
                          children
                      }: PropsWithChildren<NodeProps>) => {
+    const project = useProject();
     const [posX, setPosX] = usePersistedState('posX', fixedX || initialX || window.innerWidth / 2, {
-        namespace: `nodes/${id}`,
+        namespace: `projects/${project.id}/nodes/${id}`,
         debounce: 1000,
     });
     const [posY, setPosY] = usePersistedState('posY', fixedY || initialY || window.innerHeight / 2, {
-        namespace: `nodes/${id}`,
+        namespace: `projects/${project.id}/nodes/${id}`,
         debounce: 1000,
     });
 

@@ -1,6 +1,7 @@
 import "./ProjectSelectionPage.scss"
 import {PropsWithChildren, useState} from "react";
 import {useAudioContext} from "../hooks/useAudioContext";
+import {ProjectContext} from "../hooks/useProject";
 
 export const ProjectSelectionPage = ({children}: PropsWithChildren) => {
     const [started, setStarted] = useState(false);
@@ -8,9 +9,13 @@ export const ProjectSelectionPage = ({children}: PropsWithChildren) => {
 
     if (started) {
         return (
-            <>
+            <ProjectContext.Provider value={{
+                id: 'default',
+                name: 'Default',
+                namespace: `projects/default`
+            }}>
                 {children}
-            </>
+            </ProjectContext.Provider>
         )
     }
 

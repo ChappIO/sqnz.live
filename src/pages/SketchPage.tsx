@@ -1,5 +1,4 @@
 import './SketchPage.scss';
-import {useState} from "react";
 import {SpeakerNode} from "../nodes/SpeakerNode";
 import {AddNewNodeNode} from "../nodes/AddNewNodeNode";
 import {ConnectionType, NodeProps} from "../nodes/Node";
@@ -7,6 +6,9 @@ import {uuid} from "../utils/uuid";
 import {WaveNode} from "../nodes/WaveNode";
 import {useForceUpdate} from "../hooks/useForceUpdate";
 import {ReverbNode} from "../nodes/ReverbNode";
+import {useProject} from "../hooks/useProject";
+import {usePersistedState} from "../hooks/usePersistedState";
+import {useEffect} from "react";
 
 interface NodeSettings {
     component: any;
@@ -58,9 +60,19 @@ interface ConnectionDescription {
 }
 
 export const SketchPage = () => {
-    const [nodes, setNodes] = useState<NodeDescription[]>([]);
-    const [connections, setConnections] = useState<ConnectionDescription[]>([]);
+    const project = useProject();
+    const [nodes, setNodes] = usePersistedState<NodeDescription[]>('nodes', [], {
+        namespace: project.namespace
+    });
+    const [connections, setConnections] = usePersistedState<ConnectionDescription[]>('connections', [], {
+        namespace: project.namespace
+    });
     const forceUpdate = useForceUpdate();
+
+    // Force reload after first pass to generate initial connections
+    useEffect(() => {
+        forceUpdate();
+    }, [forceUpdate]);
 
     function getNodeById(id: string): NodeDescription | undefined {
         switch (id) {
