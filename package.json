@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "sass": "^1.58.3",
+    "serve": "^14.2.0",
     "tonal": "^4.14.0",
     "tone": "^14.7.77",
     "typescript": "^4.4.2",
@@ -30,7 +31,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "serve": "serve -s build"
   },
   "browserslist": {
     "production": [

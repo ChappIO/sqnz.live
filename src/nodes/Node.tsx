@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, ReactElement, TouchEvent, useState} from "react";
+import {FC, PropsWithChildren, ReactElement, TouchEvent, useEffect, useState} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
@@ -57,6 +57,8 @@ export const Node = ({
                          onDelete,
                          children,
                          modalActions,
+                         inputs,
+                         outputs,
                          node,
                      }: PropsWithChildren<NodeProps & SpecificNodeProps>) => {
     const project = useProject();
@@ -69,17 +71,16 @@ export const Node = ({
         debounce: 1000,
     });
     const [showDetails, setShowDetails] = useState(false);
+    const [couldBeTouchEvent, setCouldBeTouchEvent] = useState(false);
 
-    function onClick() {
-        if (onTap) {
-            onTap();
-            return;
-        }
-        setShowDetails(true);
-    }
+
+    useEffect(() => {
+        setCouldBeTouchEvent(false);
+    }, [inputs, outputs]);
 
     function onTouchStart(e: TouchEvent) {
         e.stopPropagation();
+        setCouldBeTouchEvent(true);
         if (e.touches.length === 2) {
             // this may be a node connection
             const from = findNodeId(e.touches[0].target as HTMLElement);
@@ -93,6 +94,13 @@ export const Node = ({
     }
 
     function onTouchEnd(e: TouchEvent) {
+        if (couldBeTouchEvent) {
+            if (onTap) {
+                onTap();
+                return;
+            }
+            setShowDetails(true);
+        }
         e.stopPropagation();
     }
 
@@ -102,6 +110,7 @@ export const Node = ({
             const target = e.currentTarget as HTMLElement;
             setPosX(touch.pageX - target.clientWidth / 2);
             setPosY(touch.pageY - target.clientHeight / 2);
+            setCouldBeTouchEvent(false);
             if (onMoved) {
                 onMoved();
             }
@@ -122,7 +131,6 @@ export const Node = ({
                     onTouchStart={onTouchStart}
                     onTouchMoveCapture={onTouchMove}
                     onTouchEndCapture={onTouchEnd}
-                    onClick={onClick}
             >
                 <i className={`fas ${node.icon}`}/>
             </button>
