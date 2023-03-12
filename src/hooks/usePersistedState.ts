@@ -22,7 +22,6 @@ export const usePersistedState = <T>(key: string, defaultValue: T, options: Opti
     const storageKey = `${namespace || 'default'}/${key}`;
     const [value, setValue] = useState<T>(() => {
         const storedValue = localStorage.getItem(storageKey);
-        console.log({storageKey, storedValue});
         if (!storedValue) {
             return defaultValue;
         } else {

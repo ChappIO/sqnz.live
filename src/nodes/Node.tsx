@@ -1,9 +1,15 @@
-import {PropsWithChildren, TouchEvent} from "react";
+import {PropsWithChildren, TouchEvent, useState} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
+import {Modal} from "../components/Modal";
 
 export type ConnectionType = 'audio';
+
+export interface SpecificNodeProps {
+    icon: string;
+    name: string;
+}
 
 export interface NodeProps {
     id: string;
@@ -40,8 +46,10 @@ export const Node = ({
                          onTap,
                          onConnect,
                          onMoved,
+                         icon,
+                         name,
                          children
-                     }: PropsWithChildren<NodeProps>) => {
+                     }: PropsWithChildren<NodeProps & SpecificNodeProps>) => {
     const project = useProject();
     const [posX, setPosX] = usePersistedState('posX', fixedX || initialX || window.innerWidth / 2, {
         namespace: `projects/${project.id}/nodes/${id}`,
@@ -51,11 +59,17 @@ export const Node = ({
         namespace: `projects/${project.id}/nodes/${id}`,
         debounce: 1000,
     });
+    const [showDetails, setShowDetails] = useState(false);
 
-    function onTouchStart(e: TouchEvent) {
+    function onClick() {
         if (onTap) {
             onTap();
+            return;
         }
+        setShowDetails(true);
+    }
+
+    function onTouchStart(e: TouchEvent) {
         e.stopPropagation();
         if (e.touches.length === 2) {
             // this may be a node connection
@@ -89,17 +103,25 @@ export const Node = ({
     const y = fixedY === undefined ? posY : fixedY;
 
     return (
-        <button data-nodeid={id}
-                id={id}
-                className="Node"
-                style={{
-                    transform: `translate(${x}px, ${y}px)`
-                }}
-                onTouchStart={onTouchStart}
-                onTouchMoveCapture={onTouchMove}
-                onTouchEndCapture={onTouchEnd}
-        >
-            {children}
-        </button>
+        <>
+            <button data-nodeid={id}
+                    id={id}
+                    className="Node"
+                    style={{
+                        transform: `translate(${x}px, ${y}px)`
+                    }}
+                    onTouchStart={onTouchStart}
+                    onTouchMoveCapture={onTouchMove}
+                    onTouchEndCapture={onTouchEnd}
+                    onClick={onClick}
+            >
+                <i className={`fas ${icon}`}/>
+            </button>
+            {showDetails && (
+                <Modal title={<><i className={`fas ${icon}`}/> {name}</>} onClose={() => setShowDetails(false)}>
+                    {children}
+                </Modal>
+            )}
+        </>
     );
 }

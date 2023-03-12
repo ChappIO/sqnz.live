@@ -13,8 +13,7 @@ export const SpeakerNode = ({...nodeProps}: NodeProps) => {
     const output = useSingleton(() => context.destination);
     useRegisterAudioNode(nodeProps.id, output);
     return (
-        <Node {...nodeProps}>
-            <i className="fas fa-volume-high"/>
+        <Node {...nodeProps} icon="fa-volume-high" name="Speaker">
         </Node>
     )
 }

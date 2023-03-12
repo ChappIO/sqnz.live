@@ -1,0 +1,9 @@
+
+.modal.active {
+  opacity: 1;
+  visibility: visible;
+
+  .modal-body {
+    top: 50%;
+  }
+}

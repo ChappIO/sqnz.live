@@ -11,27 +11,28 @@ export const WaveNode = ({onTap, ...nodeProps}: NodeProps) => {
     const getAudioNode = useGetAudioNode();
     const context = useAudioContext();
 
-    return (
-        <Node {...nodeProps} onTap={() => {
-            if (onTap) {
-                onTap();
+    function playNote() {
+        if (onTap) {
+            onTap();
+        }
+        const gain = context.createGain();
+        destinations.forEach(key => {
+            const destination = getAudioNode(key);
+            if (destination) {
+                gain.connect(destination);
             }
-            const gain = context.createGain();
-            destinations.forEach(key => {
-                const destination = getAudioNode(key);
-                if (destination) {
-                    gain.connect(destination);
-                }
-            });
-            const osc = context.createOscillator();
-            osc.connect(gain);
-            osc.start();
+        });
+        const osc = context.createOscillator();
+        osc.connect(gain);
+        osc.start();
 
-            setTimeout(() => {
-                gain.gain.setTargetAtTime(0, context.currentTime, 0.01);
-            }, 500);
-        }}>
-            <i className="fas fa-wave-square"/>
+        setTimeout(() => {
+            gain.gain.setTargetAtTime(0, context.currentTime, 0.01);
+        }, 500);
+    }
+
+    return (
+        <Node {...nodeProps} onTap={playNote} icon="fa-wave-square" name="Wave">
         </Node>
     )
 }

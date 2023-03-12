@@ -3,6 +3,8 @@ import {useSingleton} from "../hooks/useSingleton";
 import {useAudioContext} from "../hooks/useAudioContext";
 import {useGetAudioNode, useRegisterAudioNode} from "../hooks/useAudioNodeRegister";
 import {useEffect, useMemo, useState} from "react";
+import {usePersistedState} from "../hooks/usePersistedState";
+import {useProject} from "../hooks/useProject";
 
 
 export enum ReverbFiles {
@@ -53,6 +55,7 @@ export interface Props extends NodeProps {
 }
 
 export const ReverbNode = ({...nodeProps}: NodeProps) => {
+    const project = useProject();
     const destinations = useMemo(() => nodeProps.outputs.filter(o => o.type === 'audio').map(o => o.to), [nodeProps.outputs]);
     const getAudioNode = useGetAudioNode();
     const context = useAudioContext();
@@ -62,7 +65,9 @@ export const ReverbNode = ({...nodeProps}: NodeProps) => {
     );
     useRegisterAudioNode(nodeProps.id, convolver);
 
-    const [preset] = useState<ReverbPreset>('In The Silo Revised');
+    const [preset, setPreset] = usePersistedState<ReverbPreset>('preset', 'In The Silo Revised', {
+        namespace: project.namespace
+    });
 
     useEffect(() => {
         if (preset) {
@@ -100,8 +105,15 @@ export const ReverbNode = ({...nodeProps}: NodeProps) => {
     }, [convolver, destinations, connectedTo, getAudioNode]);
 
     return (
-        <Node {...nodeProps}>
-            <i className="fas fa-explosion"/>
+        <Node {...nodeProps} icon="fa-explosion" name="Reverb">
+            <div className="form-group">
+                <label htmlFor="preset">Preset</label>
+                <select id="preset" value={preset} onChange={(e) => setPreset(e.target.value as any)}>
+                    {Object.keys(ReverbFiles).map(name => (
+                        <option key={name} value={name}>{name}</option>
+                    ))}
+                </select>
+            </div>
         </Node>
     )
 }
