@@ -34,6 +34,8 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
                 gain.connect(destination);
             }
         });
+        gain.gain.setValueAtTime(0, context.currentTime);
+        gain.gain.setTargetAtTime(1, context.currentTime, 0.01);
         const osc = context.createOscillator();
         osc.frequency.setValueAtTime(
             Note.get(Note.transpose(trigger.note.name, Interval.fromSemitones(tune))).freq!,
@@ -45,7 +47,7 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
         osc.start();
 
         trigger.onStop(() => {
-            gain.gain.setValueAtTime(0, context.currentTime);
+            gain.gain.setTargetAtTime(0, context.currentTime, 0.02);
             setTimeout(() => {
                 osc.disconnect();
                 gain.disconnect();
