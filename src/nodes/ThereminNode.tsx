@@ -40,8 +40,6 @@ export const ThereminNode: CustomNode = ({...nodeProps}: NodeProps) => {
             if (!touch) {
                 continue;
             }
-
-            console.log('start', touch.identifier);
             for (let destination of destinations) {
                 getTriggerNode(destination)?.fire(
                     touch.identifier,
@@ -75,7 +73,6 @@ export const ThereminNode: CustomNode = ({...nodeProps}: NodeProps) => {
     function onTouchEnd(e: TouchEvent) {
         for (let i = 0; i < e.changedTouches.length; i++) {
             const touch = e.changedTouches.item(i);
-            console.log('stop', touch.identifier);
             for (let destination of destinations) {
                 getTriggerNode(destination)?.get(touch.identifier)?.stop();
             }
