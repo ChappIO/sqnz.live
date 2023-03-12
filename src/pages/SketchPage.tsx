@@ -128,6 +128,11 @@ export const SketchPage = () => {
         });
     }
 
+    function onDelete(nodeId: string) {
+        setConnections(prev => prev.filter(con => con.from !== nodeId && con.to !== nodeId));
+        setNodes(prev => prev.filter(node => node.id !== nodeId));
+    }
+
     return (
         <div className="SketchPage">
             <div className="Backdrop">
@@ -183,6 +188,7 @@ export const SketchPage = () => {
                                   inputs={inputs}
                                   outputs={outputs}
                                   onMoved={forceUpdate}
+                                  onDelete={onDelete}
                                   {...node}
                 />
             })}

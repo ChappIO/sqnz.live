@@ -28,6 +28,7 @@ export interface NodeProps {
         type: ConnectionType,
         to: string,
     }[];
+    onDelete?: (id: string) => void;
 }
 
 function findNodeId(element: HTMLElement | null | undefined): string | undefined {
@@ -46,6 +47,7 @@ export const Node = ({
                          onTap,
                          onConnect,
                          onMoved,
+                         onDelete,
                          icon,
                          name,
                          children
@@ -120,6 +122,12 @@ export const Node = ({
             {showDetails && (
                 <Modal title={<><i className={`fas ${icon}`}/> {name}</>} onClose={() => setShowDetails(false)}>
                     {children}
+
+                    <div className="buttons">
+                        <button className="btn-danger" onClick={() => onDelete && onDelete(id)}><i
+                            className="fas fa-bomb"/> Delete
+                        </button>
+                    </div>
                 </Modal>
             )}
         </>
