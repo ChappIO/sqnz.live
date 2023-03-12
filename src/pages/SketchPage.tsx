@@ -11,6 +11,7 @@ import {useEffect, useState} from "react";
 import {Modal} from "../components/Modal";
 import {uuid} from "../utils/uuid";
 import {ThereminNode} from "../nodes/ThereminNode";
+import {RandomTriggerNode} from "../nodes/RandomTriggerNode";
 
 const Nodes: { [key: string]: CustomNode } = {
     speaker: SpeakerNode,
@@ -18,6 +19,7 @@ const Nodes: { [key: string]: CustomNode } = {
     theremin: ThereminNode,
     wave: WaveNode,
     reverb: ReverbNode,
+    random: RandomTriggerNode,
 }
 
 const NodesByCategory = Object.values(Nodes).reduce(

@@ -13,6 +13,9 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const [waveform, setWaveform] = usePersistedState<OscillatorType>('waveform', 'sine', {
         namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
+    const [oct, setOct] = usePersistedState<number>('oct', 0, {
+        namespace: `${project.namespace}/nodes/${nodeProps.id}`
+    });
     const [tune, setTune] = usePersistedState<number>('tune', 0, {
         namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
@@ -38,7 +41,7 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
         gain.gain.setTargetAtTime(1, context.currentTime, 0.01);
         const osc = context.createOscillator();
         osc.frequency.setValueAtTime(
-            Note.get(Note.transpose(trigger.note.name, Interval.fromSemitones(tune))).freq!,
+            Note.get(Note.transpose(trigger.note.name, Interval.fromSemitones(tune + (12 * oct)))).freq!,
             context.currentTime
         );
         osc.type = waveform;
@@ -57,7 +60,7 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
         trigger.onDetune((trigger) => {
             osc.detune.setValueAtTime(detune + (trigger.detune * 100), context.currentTime);
         });
-    }, [context, destinations, detune, getAudioNode, tune, waveform]);
+    }, [context, destinations, detune, getAudioNode, tune, oct, waveform]);
 
     useEffect(() => {
         return trigger.onTrigger((trigger) => {
@@ -97,6 +100,26 @@ export const WaveNode: CustomNode = ({...nodeProps}: NodeProps) => {
                     <option value="square">Square</option>
                     <option value="sawtooth">Saw</option>
                 </select>
+            </div>
+            <div className="form-group">
+                <label htmlFor="oct"
+                       onClick={() => {
+                           setOct(0);
+                       }}>
+                    Oct
+                </label>
+                <input className="input-block"
+                       type="range"
+                       name="oct"
+                       id="oct"
+                       min="-4"
+                       max="4"
+                       value={oct}
+                       onChange={e => {
+                           setOct(parseInt(e.target.value))
+                       }}
+                />
+                <output id="output" htmlFor="oct">{oct > 0 && '+'}{oct}</output>
             </div>
             <div className="form-group">
                 <label htmlFor="tune"

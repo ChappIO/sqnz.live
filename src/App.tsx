@@ -9,11 +9,11 @@ export const App = () => {
     return (
         <AudioContextProvider>
             <ProjectSelectionPage>
-                <AudioNodeRegisterProvider>
-                    <TriggerNodeRegisterProvider>
+                <TriggerNodeRegisterProvider>
+                    <AudioNodeRegisterProvider>
                         <SketchPage/>
-                    </TriggerNodeRegisterProvider>
-                </AudioNodeRegisterProvider>
+                    </AudioNodeRegisterProvider>
+                </TriggerNodeRegisterProvider>
             </ProjectSelectionPage>
         </AudioContextProvider>
     );

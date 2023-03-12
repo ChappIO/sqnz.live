@@ -58,13 +58,18 @@ export type TriggerHandler = (trigger: Trigger) => void;
 
 export type Unsubscribe = () => void;
 
+let globalNodeCounter = Date.now();
+
 export class TriggerNode {
     private readonly triggerHandlers: Record<number, TriggerHandler> = {};
     private triggerHandlerCounter = 0;
     private readonly triggers: Record<number, Trigger> = {};
 
-    fire(uniqueId: number, noteName: string, details: Record<string, any> = {}) {
+    fire(uniqueId: number | undefined, noteName: string, details: Record<string, any> = {}): Trigger {
         const note = Note.get(noteName);
+        if (!uniqueId) {
+            uniqueId = globalNodeCounter++;
+        }
         const trigger = new Trigger(
             uniqueId,
             note
@@ -75,6 +80,7 @@ export class TriggerNode {
         for (let triggerHandlersKey in this.triggerHandlers) {
             this.triggerHandlers[triggerHandlersKey](trigger);
         }
+        return trigger;
     }
 
     get(uniqueId: number): Trigger | undefined {
