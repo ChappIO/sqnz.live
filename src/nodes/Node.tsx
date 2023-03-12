@@ -1,4 +1,4 @@
-import {PropsWithChildren, TouchEvent, useState} from "react";
+import {PropsWithChildren, ReactElement, TouchEvent, useState} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
@@ -9,6 +9,8 @@ export type ConnectionType = 'audio';
 export interface SpecificNodeProps {
     icon: string;
     name: string;
+
+    modalActions?: ReactElement
 }
 
 export interface NodeProps {
@@ -50,15 +52,16 @@ export const Node = ({
                          onDelete,
                          icon,
                          name,
-                         children
+                         children,
+                         modalActions,
                      }: PropsWithChildren<NodeProps & SpecificNodeProps>) => {
     const project = useProject();
     const [posX, setPosX] = usePersistedState('posX', fixedX || initialX || window.innerWidth / 2, {
-        namespace: `projects/${project.id}/nodes/${id}`,
+        namespace: `${project.namespace}/nodes/${id}`,
         debounce: 1000,
     });
     const [posY, setPosY] = usePersistedState('posY', fixedY || initialY || window.innerHeight / 2, {
-        namespace: `projects/${project.id}/nodes/${id}`,
+        namespace: `${project.namespace}/nodes/${id}`,
         debounce: 1000,
     });
     const [showDetails, setShowDetails] = useState(false);
@@ -124,6 +127,7 @@ export const Node = ({
                     {children}
 
                     <div className="buttons">
+                        {modalActions || <div/>}
                         <button className="btn-danger" onClick={() => onDelete && onDelete(id)}><i
                             className="fas fa-bomb"/> Delete
                         </button>

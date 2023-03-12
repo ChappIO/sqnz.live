@@ -66,7 +66,7 @@ export const ReverbNode = ({...nodeProps}: NodeProps) => {
     useRegisterAudioNode(nodeProps.id, convolver);
 
     const [preset, setPreset] = usePersistedState<ReverbPreset>('preset', 'In The Silo Revised', {
-        namespace: project.namespace
+        namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
 
     useEffect(() => {
