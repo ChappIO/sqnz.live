@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "https://sqnz.live/static/css/main.dcd40a7b.css",
-    "main.js": "https://sqnz.live/static/js/main.f57289dd.js",
+    "main.js": "https://sqnz.live/static/js/main.b588521b.js",
     "static/media/fa-solid-900.ttf": "https://sqnz.live/static/media/fa-solid-900.2877d54f94f30c5d563c.ttf",
     "static/media/fa-brands-400.ttf": "https://sqnz.live/static/media/fa-brands-400.13e40630e5866f777de8.ttf",
     "static/media/fa-solid-900.woff2": "https://sqnz.live/static/media/fa-solid-900.bdb9e23299f9d1320a8b.woff2",
@@ -13,10 +13,10 @@
     "static/media/fa-v4compatibility.woff2": "https://sqnz.live/static/media/fa-v4compatibility.497d535001197a9c5b38.woff2",
     "index.html": "https://sqnz.live/index.html",
     "main.dcd40a7b.css.map": "https://sqnz.live/static/css/main.dcd40a7b.css.map",
-    "main.f57289dd.js.map": "https://sqnz.live/static/js/main.f57289dd.js.map"
+    "main.b588521b.js.map": "https://sqnz.live/static/js/main.b588521b.js.map"
   },
   "entrypoints": [
     "static/css/main.dcd40a7b.css",
-    "static/js/main.f57289dd.js"
+    "static/js/main.b588521b.js"
   ]
 }
