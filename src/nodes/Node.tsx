@@ -128,9 +128,11 @@ export const Node = ({
 
                     <div className="buttons">
                         {modalActions || <div/>}
-                        <button className="btn-danger" onClick={() => onDelete && onDelete(id)}><i
-                            className="fas fa-bomb"/> Delete
-                        </button>
+                        {onDelete && (
+                            <button className="btn-danger" onClick={() => onDelete(id)}><i
+                                className="fas fa-bomb"/> Delete
+                            </button>
+                        )}
                     </div>
                 </Modal>
             )}

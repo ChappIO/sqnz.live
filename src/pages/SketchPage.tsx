@@ -131,6 +131,16 @@ export const SketchPage = () => {
     function onDelete(nodeId: string) {
         setConnections(prev => prev.filter(con => con.from !== nodeId && con.to !== nodeId));
         setNodes(prev => prev.filter(node => node.id !== nodeId));
+
+        // remove storage
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key?.includes(`nodes/${nodeId}`)) {
+                setTimeout(() => {
+                    localStorage.removeItem(key);
+                }, 1000);
+            }
+        }
     }
 
     return (

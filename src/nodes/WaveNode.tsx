@@ -13,6 +13,9 @@ export const WaveNode = ({onTap, ...nodeProps}: NodeProps) => {
     const [waveform, setWaveform] = usePersistedState<OscillatorType>('waveform', 'sine', {
         namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
+    const [detune, setDetune] = usePersistedState<number>('detune', 0, {
+        namespace: `${project.namespace}/nodes/${nodeProps.id}`
+    });
     const destinations = nodeProps.outputs.filter(o => o.type === 'audio').map(o => o.to);
     const getAudioNode = useGetAudioNode();
     const context = useAudioContext();
@@ -30,6 +33,7 @@ export const WaveNode = ({onTap, ...nodeProps}: NodeProps) => {
         });
         const osc = context.createOscillator();
         osc.type = waveform;
+        osc.detune.setValueAtTime(detune, context.currentTime);
         osc.connect(gain);
         osc.start();
 
@@ -49,13 +53,37 @@ export const WaveNode = ({onTap, ...nodeProps}: NodeProps) => {
               </>}
         >
             <div className="form-group">
-                <label htmlFor="waveform">Waveform</label>
+                <label htmlFor="waveform"
+                       onClick={(e) => {
+                           e.preventDefault();
+                           setWaveform('sine');
+                       }}>Waveform</label>
                 <select id="waveform" value={waveform} onChange={(e) => setWaveform(e.target.value as any)}>
                     <option value="sine">Sine</option>
                     <option value="triangle">Triangle</option>
                     <option value="square">Square</option>
                     <option value="sawtooth">Saw</option>
                 </select>
+            </div>
+            <div className="form-group">
+                <label htmlFor="detune"
+                       onClick={() => {
+                           setDetune(0);
+                       }}>
+                    Detune
+                </label>
+                <input className="input-block"
+                       type="range"
+                       name="detune"
+                       id="detune"
+                       min="-100"
+                       max="100"
+                       value={detune}
+                       onChange={e => {
+                           setDetune(parseFloat(e.target.value))
+                       }}
+                />
+                <output id="output" htmlFor="detune">{detune}</output>
             </div>
         </Node>
     )
