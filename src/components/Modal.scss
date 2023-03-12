@@ -2,13 +2,13 @@
 .modal.active {
   opacity: 1;
   visibility: visible;
+  touch-action: none;
 
   .modal-body {
     top: 50%;
 
     .modal-content {
       max-height: 60vh;
-      overflow-y: scroll;
       margin-bottom: 12px;
     }
   }

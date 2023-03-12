@@ -1,0 +1,38 @@
+
+.ThereminNode.modal {
+  .play-zone {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    margin: 24px 0;
+    overflow: hidden;
+
+    .circle {
+      border-radius: 50%;
+      display: block;
+      position: absolute;
+      border-width: 5px;
+      border-style: solid;
+
+      &.back {
+        border-color: black;
+      }
+
+      &.white {
+        border-color: lightgray;
+      }
+
+      $numberOfSemitones: 13;
+
+      @for $i from 1 through ($numberOfSemitones) {
+        &:nth-child(#{$i}) {
+          $radius: 141.4% / $numberOfSemitones * ($i);
+          width: $radius * 2;
+          height: $radius * 2;
+          bottom: -$radius;
+          left: -$radius;
+        }
+      }
+    }
+  }
+}

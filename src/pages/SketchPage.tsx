@@ -127,97 +127,101 @@ export const SketchPage = () => {
     }
 
     return (
-        <div className="SketchPage">
-            <div className="Backdrop">
-                SQNZ<sub>.live</sub>
-            </div>
-            <AddNewNodeNode id="new"
-                            fixedX={12}
-                            fixedY={12}
-                            onTap={() => {
-                                setAddNodeModal(true);
-                            }}
-                            inputs={[]}
-                            outputs={[]}
-            />
-            <SpeakerNode id="master"
-                         initialX={window.innerWidth - 70}
-                         initialY={12}
-                         onConnect={onConnect}
-                         inputs={[]}
-                         outputs={[]}
-                         onMoved={forceUpdate}
-            />
-            {nodes.map(node => {
-                const Component = Nodes[node.type];
-                const inputs = connections.filter(connection =>
-                    connection.to === node.id
-                );
-                const outputs = connections.filter(connection =>
-                    connection.from === node.id
-                );
-                return <Component key={node.id}
-                                  onConnect={onConnect}
-                                  inputs={inputs}
-                                  outputs={outputs}
-                                  onMoved={forceUpdate}
-                                  onDelete={onDelete}
-                                  {...node}
+        <>
+            <div className="SketchPage">
+                <div className="Backdrop">
+                    SQNZ<sub>.live</sub>
+                </div>
+                <AddNewNodeNode id="new"
+                                fixedX={12}
+                                fixedY={12}
+                                onTap={() => {
+                                    setAddNodeModal(true);
+                                }}
+                                inputs={[]}
+                                outputs={[]}
                 />
-            })}
-            <svg className="connections" width={window.innerWidth} height={window.innerHeight}>
-                {
-                    connections.map(connection => {
-                        const fromNode = document.getElementById(connection.from) as HTMLElement;
-                        const toNode = document.getElementById(connection.to) as HTMLElement;
-                        if (!toNode || !fromNode) {
-                            return null;
-                        }
-                        const fromRect = fromNode.getBoundingClientRect();
-                        const fromSideConnect = {
-                            x: fromRect.left + fromRect.width / 2,
-                            y: fromRect.top + fromRect.height / 2
-                        }
-                        const toRect = toNode.getBoundingClientRect();
-                        const toSideConnect = {
-                            x: toRect.left + toRect.width / 2,
-                            y: toRect.top + toRect.height / 2
-                        }
-                        const droopyness = 100;
-                        return <path
-                            key={connection.id}
-                            d={`M${fromSideConnect.x} ${fromSideConnect.y} C${fromSideConnect.x} ${fromSideConnect.y + droopyness}, ${toSideConnect.x} ${toSideConnect.y + droopyness}, ${toSideConnect.x} ${toSideConnect.y}`}
-                            fill="transparent"
-                            stroke="black"
-                            strokeWidth={2}
-                        />
-                    })
-                }
-            </svg>
+                <SpeakerNode id="master"
+                             initialX={window.innerWidth - 70}
+                             initialY={12}
+                             onConnect={onConnect}
+                             inputs={[]}
+                             outputs={[]}
+                             onMoved={forceUpdate}
+                />
+                {nodes.map(node => {
+                    const Component = Nodes[node.type];
+                    const inputs = connections.filter(connection =>
+                        connection.to === node.id
+                    );
+                    const outputs = connections.filter(connection =>
+                        connection.from === node.id
+                    );
+                    return <Component key={node.id}
+                                      onConnect={onConnect}
+                                      inputs={inputs}
+                                      outputs={outputs}
+                                      onMoved={forceUpdate}
+                                      onDelete={onDelete}
+                                      {...node}
+                    />
+                })}
+                <svg className="connections" width={window.innerWidth} height={window.innerHeight}>
+                    {
+                        connections.map(connection => {
+                            const fromNode = document.getElementById(connection.from) as HTMLElement;
+                            const toNode = document.getElementById(connection.to) as HTMLElement;
+                            if (!toNode || !fromNode) {
+                                return null;
+                            }
+                            const fromRect = fromNode.getBoundingClientRect();
+                            const fromSideConnect = {
+                                x: fromRect.left + fromRect.width / 2,
+                                y: fromRect.top + fromRect.height / 2
+                            }
+                            const toRect = toNode.getBoundingClientRect();
+                            const toSideConnect = {
+                                x: toRect.left + toRect.width / 2,
+                                y: toRect.top + toRect.height / 2
+                            }
+                            const droopyness = 100;
+                            return <path
+                                key={connection.id}
+                                d={`M${fromSideConnect.x} ${fromSideConnect.y} C${fromSideConnect.x} ${fromSideConnect.y + droopyness}, ${toSideConnect.x} ${toSideConnect.y + droopyness}, ${toSideConnect.x} ${toSideConnect.y}`}
+                                fill="transparent"
+                                stroke="black"
+                                strokeWidth={2}
+                            />
+                        })
+                    }
+                </svg>
+            </div>
             {addNodeModal && (
                 <Modal title="Add" onClose={() => setAddNodeModal(false)}>
-                    {Object.entries(NodesByCategory).map(([category, nodes]) => (
-                        <div key={category}>
-                            <h5>{category}</h5>
-                            <div className="buttons" style={{marginBottom: 12}}>
-                                {nodes.map(node => (
-                                    <button key={node.displayName} onClick={() => {
-                                        const Node = node;
-                                        const id = uuid();
-                                        setNodes(prev => [...prev, {
-                                            id,
-                                            type: Object.entries(Nodes).filter(([, search]) => Node === search)[0][0]
-                                        }]);
-                                        setAddNodeModal(false);
-                                    }}>
-                                        <span><i className={`fas ${node.icon}`}/> {node.displayName}</span>
-                                    </button>
-                                ))}
+                    <div className="modal-content">
+                        {Object.entries(NodesByCategory).map(([category, nodes]) => (
+                            <div key={category}>
+                                <h5>{category}</h5>
+                                <div className="buttons" style={{marginBottom: 12}}>
+                                    {nodes.map(node => (
+                                        <button key={node.displayName} onClick={() => {
+                                            const Node = node;
+                                            const id = uuid();
+                                            setNodes(prev => [...prev, {
+                                                id,
+                                                type: Object.entries(Nodes).filter(([, search]) => Node === search)[0][0]
+                                            }]);
+                                            setAddNodeModal(false);
+                                        }}>
+                                            <span><i className={`fas ${node.icon}`}/> {node.displayName}</span>
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </Modal>
             )}
-        </div>
+        </>
     )
 }

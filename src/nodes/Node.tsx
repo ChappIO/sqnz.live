@@ -127,7 +127,8 @@ export const Node = ({
                 <i className={`fas ${node.icon}`}/>
             </button>
             {showDetails && (
-                <Modal title={<><i className={`fas ${node.icon}`}/> {node.displayName}</>}
+                <Modal className={node.name}
+                       title={<><i className={`fas ${node.icon}`}/> {node.displayName}</>}
                        onClose={() => setShowDetails(false)}>
                     {children}
 
