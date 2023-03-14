@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, ReactElement, TouchEvent, useEffect, useState} from "react";
+import {FC, PropsWithChildren, ReactElement, TouchEvent, useState} from "react";
 import './Node.scss';
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
@@ -71,15 +71,8 @@ export const Node = ({
         debounce: 1000,
     });
     const [showDetails, setShowDetails] = useState(false);
-    const [couldBeTouchEvent, setCouldBeTouchEvent] = useState(false);
-
-
-    useEffect(() => {
-        setCouldBeTouchEvent(false);
-    }, [inputs, outputs]);
 
     function onTouchStart(e: TouchEvent) {
-        setCouldBeTouchEvent(true);
         if (e.touches.length === 2) {
             // this may be a node connection
             const from = findNodeId(e.touches[0].target as HTMLElement);
@@ -98,7 +91,6 @@ export const Node = ({
             const target = e.currentTarget as HTMLElement;
             setPosX(touch.pageX - target.clientWidth / 2);
             setPosY(touch.pageY - target.clientHeight / 2);
-            setCouldBeTouchEvent(false);
             if (onMoved) {
                 onMoved();
             }

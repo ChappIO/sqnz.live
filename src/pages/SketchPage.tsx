@@ -12,6 +12,7 @@ import {Modal} from "../components/Modal";
 import {uuid} from "../utils/uuid";
 import {ThereminNode} from "../nodes/ThereminNode";
 import {RandomTriggerNode} from "../nodes/RandomTriggerNode";
+import {ProgramTriggerNode} from "../nodes/ProgramTriggerNode";
 
 const Nodes: { [key: string]: CustomNode } = {
     speaker: SpeakerNode,
@@ -20,6 +21,7 @@ const Nodes: { [key: string]: CustomNode } = {
     wave: WaveNode,
     reverb: ReverbNode,
     random: RandomTriggerNode,
+    program: ProgramTriggerNode,
 }
 
 const NodesByCategory = Object.values(Nodes).reduce(
@@ -204,7 +206,7 @@ export const SketchPage = () => {
                         {Object.entries(NodesByCategory).map(([category, nodes]) => (
                             <div key={category}>
                                 <h5>{category}</h5>
-                                <div className="buttons" style={{marginBottom: 12}}>
+                                <div className="buttons" style={{marginBottom: 12, flexWrap: 'wrap'}}>
                                     {nodes.map(node => (
                                         <button key={node.displayName} onClick={() => {
                                             const Node = node;
