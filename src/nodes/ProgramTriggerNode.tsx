@@ -35,7 +35,7 @@ export const ProgramTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
     useEffect(() => {
         const timer = setInterval(() => {
             setActiveStep(prev => (prev + 1) % length);
-        }, 1000);
+        }, 150);
 
         return () => clearInterval(timer);
     }, [length]);
@@ -57,7 +57,8 @@ export const ProgramTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
                 }, 100);
             }
         }
-    }, [activeStep, steps]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeStep]);
 
     function setLength(newLength: number) {
         if (newLength > steps.length) {
@@ -102,7 +103,7 @@ export const ProgramTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
                         const note = Note.get(Note.transpose('C5', Interval.fromSemitones(-offset)));
                         return (
                             <div key={offset} className={`row ${note.acc ? 'black' : 'white'}`} style={{
-                                width: (length + 1) * 48
+                                width: (length + 1) * 24
                             }}>
                                 <div className="step"/>
                                 {

@@ -5,20 +5,24 @@
     overflow: scroll;
     touch-action: cross-slide-y cross-slide-x;
 
+    $blockSize: 24px;
+
     .row {
       margin: 0;
       padding: 0;
-      height: 36px;
+      height: $blockSize;
       border: 1px solid rgba(black, 0.3);
       display: flex;
       flex-wrap: nowrap;
 
       &.black {
-        background-color: rgba(black, 0.3);
+        .step {
+          background-color: rgba(black, 0.3);
+        }
       }
 
       .step {
-        width: 48px;
+        width: $blockSize;
         height: 100%;
         flex-grow: 0;
         flex-shrink: 0;
@@ -30,22 +34,22 @@
           align-items: center;
         }
 
-        &.trig {
-          background-color: rgba(black, 0.6);
-        }
-
         &.active {
           background-color: rgba(0, 166, 255, 0.29);
+        }
+
+        &.trig {
+          background-color: rgba(black, 0.6);
         }
       }
 
       &:nth-child(3n) {
         .step:before {
           content: '';
-          background-color: rgba(black, 0.6);
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
+          background-color: #5b5b5b;
+          width: $blockSize * 0.3;
+          height: $blockSize * 0.6;
+          border-radius: 1px;
         }
       }
     }
