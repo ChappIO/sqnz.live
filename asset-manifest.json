@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "https://sqnz.live/static/css/main.dcd40a7b.css",
-    "main.js": "https://sqnz.live/static/js/main.4a170ed4.js",
-    "static/media/fa-solid-900.ttf": "https://sqnz.live/static/media/fa-solid-900.2877d54f94f30c5d563c.ttf",
-    "static/media/fa-brands-400.ttf": "https://sqnz.live/static/media/fa-brands-400.13e40630e5866f777de8.ttf",
-    "static/media/fa-solid-900.woff2": "https://sqnz.live/static/media/fa-solid-900.bdb9e23299f9d1320a8b.woff2",
-    "static/media/fa-brands-400.woff2": "https://sqnz.live/static/media/fa-brands-400.7be2266f1be21c44ecd4.woff2",
-    "static/media/fa-regular-400.ttf": "https://sqnz.live/static/media/fa-regular-400.146404900f7550a9719d.ttf",
-    "service-worker.js": "https://sqnz.live/service-worker.js",
-    "static/media/fa-regular-400.woff2": "https://sqnz.live/static/media/fa-regular-400.8bedd7cfa43a6c358cdd.woff2",
-    "static/media/fa-v4compatibility.ttf": "https://sqnz.live/static/media/fa-v4compatibility.6c0a7b774ffa1cf0a059.ttf",
-    "static/media/fa-v4compatibility.woff2": "https://sqnz.live/static/media/fa-v4compatibility.497d535001197a9c5b38.woff2",
-    "index.html": "https://sqnz.live/index.html",
-    "main.dcd40a7b.css.map": "https://sqnz.live/static/css/main.dcd40a7b.css.map",
-    "main.4a170ed4.js.map": "https://sqnz.live/static/js/main.4a170ed4.js.map"
+    "main.css": "https://www.sqnz.live/static/css/main.440a1db5.css",
+    "main.js": "https://www.sqnz.live/static/js/main.6b88d250.js",
+    "static/media/fa-solid-900.ttf": "https://www.sqnz.live/static/media/fa-solid-900.2877d54f94f30c5d563c.ttf",
+    "static/media/fa-brands-400.ttf": "https://www.sqnz.live/static/media/fa-brands-400.13e40630e5866f777de8.ttf",
+    "static/media/fa-solid-900.woff2": "https://www.sqnz.live/static/media/fa-solid-900.bdb9e23299f9d1320a8b.woff2",
+    "static/media/fa-brands-400.woff2": "https://www.sqnz.live/static/media/fa-brands-400.7be2266f1be21c44ecd4.woff2",
+    "static/media/fa-regular-400.ttf": "https://www.sqnz.live/static/media/fa-regular-400.146404900f7550a9719d.ttf",
+    "service-worker.js": "https://www.sqnz.live/service-worker.js",
+    "static/media/fa-regular-400.woff2": "https://www.sqnz.live/static/media/fa-regular-400.8bedd7cfa43a6c358cdd.woff2",
+    "static/media/fa-v4compatibility.ttf": "https://www.sqnz.live/static/media/fa-v4compatibility.6c0a7b774ffa1cf0a059.ttf",
+    "static/media/fa-v4compatibility.woff2": "https://www.sqnz.live/static/media/fa-v4compatibility.497d535001197a9c5b38.woff2",
+    "index.html": "https://www.sqnz.live/index.html",
+    "main.440a1db5.css.map": "https://www.sqnz.live/static/css/main.440a1db5.css.map",
+    "main.6b88d250.js.map": "https://www.sqnz.live/static/js/main.6b88d250.js.map"
   },
   "entrypoints": [
-    "static/css/main.dcd40a7b.css",
-    "static/js/main.4a170ed4.js"
+    "static/css/main.440a1db5.css",
+    "static/js/main.6b88d250.js"
   ]
 }
