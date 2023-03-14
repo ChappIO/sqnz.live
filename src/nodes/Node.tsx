@@ -79,7 +79,6 @@ export const Node = ({
     }, [inputs, outputs]);
 
     function onTouchStart(e: TouchEvent) {
-        e.stopPropagation();
         setCouldBeTouchEvent(true);
         if (e.touches.length === 2) {
             // this may be a node connection
@@ -91,17 +90,6 @@ export const Node = ({
                 }
             }
         }
-    }
-
-    function onTouchEnd(e: TouchEvent) {
-        if (couldBeTouchEvent) {
-            if (onTap) {
-                onTap();
-                return;
-            }
-            setShowDetails(true);
-        }
-        e.stopPropagation();
     }
 
     function onTouchMove(e: TouchEvent) {
@@ -122,18 +110,6 @@ export const Node = ({
 
     return (
         <>
-            <button data-nodeid={id}
-                    id={id}
-                    className="Node"
-                    style={{
-                        transform: `translate(${x}px, ${y}px)`
-                    }}
-                    onTouchStart={onTouchStart}
-                    onTouchMoveCapture={onTouchMove}
-                    onTouchEndCapture={onTouchEnd}
-            >
-                <i className={`fas ${node.icon}`}/>
-            </button>
             {showDetails && (
                 <Modal className={node.displayName}
                        title={<><i className={`fas ${node.icon}`}/> {node.displayName}</>}
@@ -150,6 +126,24 @@ export const Node = ({
                     </div>
                 </Modal>
             )}
+            <button data-nodeid={id}
+                    id={id}
+                    className="Node"
+                    style={{
+                        transform: `translate(${x}px, ${y}px)`
+                    }}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onClick={() => {
+                        if (onTap) {
+                            onTap();
+                            return;
+                        }
+                        setShowDetails(true);
+                    }}
+            >
+                <i className={`fas ${node.icon}`}/>
+            </button>
         </>
     );
 }
