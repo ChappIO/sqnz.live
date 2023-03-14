@@ -6,6 +6,7 @@ import {useDeepMemo} from "../hooks/useDeepMemo";
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useProject} from "../hooks/useProject";
 import {Scale} from "tonal";
+import {useClock} from "../hooks/useClock";
 
 const scales = [
     'chromatic',
@@ -16,13 +17,8 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const destinations = useDeepMemo(nodeProps.outputs.filter(o => o.type === 'note').map(o => o.to));
     const getTriggerNode = useGetTriggerNode();
     const project = useProject();
+    const clock = useClock();
     const [scale, setScale] = usePersistedState('scale', scales[0], {
-        namespace: `${project.namespace}/nodes/${nodeProps.id}`
-    });
-    const [tempo, setTempo] = usePersistedState('tempo', 120, {
-        namespace: `${project.namespace}/nodes/${nodeProps.id}`
-    });
-    const [steps, setSteps] = usePersistedState('steps', 4, {
         namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
     const [chance, setChance] = usePersistedState('chance', 100, {
@@ -32,10 +28,8 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
         namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
 
-    const interval = 60000 / tempo / steps;
-
     useEffect(() => {
-        const timer = setInterval(() => {
+        return clock.onStep(() => {
             if (Math.random() * 100 > chance) {
                 return;
             }
@@ -49,12 +43,10 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
 
                 setTimeout(() => {
                     trigger?.stop();
-                }, length * interval / 8);
+                }, 60000 / clock.bpm / clock.stepsPerBeat * length / 8);
             }
-        }, interval);
-
-        return () => clearInterval(timer);
-    }, [destinations, interval, getTriggerNode, scale, chance, length]);
+        });
+    }, [destinations, clock, getTriggerNode, scale, chance, length]);
 
 
     return (
@@ -69,46 +61,6 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
                             <option key={name} value={name}>{name}</option>
                         ))}
                     </select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="tempo"
-                           onClick={() => {
-                               setTempo(120);
-                           }}>
-                        Tempo
-                    </label>
-                    <input className="input-block"
-                           type="range"
-                           name="tempo"
-                           id="tempo"
-                           min="10"
-                           max="500"
-                           value={tempo}
-                           onChange={e => {
-                               setTempo(parseInt(e.target.value))
-                           }}
-                    />
-                    <output id="output" htmlFor="tempo">{tempo} bpm</output>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="steps"
-                           onClick={() => {
-                               setSteps(4);
-                           }}>
-                        Steps
-                    </label>
-                    <input className="input-block"
-                           type="range"
-                           name="steps"
-                           id="steps"
-                           min="1"
-                           max="8"
-                           value={steps}
-                           onChange={e => {
-                               setSteps(parseInt(e.target.value))
-                           }}
-                    />
-                    <output id="output" htmlFor="steps">{steps} spb</output>
                 </div>
                 <div className="form-group">
                     <label htmlFor="length"

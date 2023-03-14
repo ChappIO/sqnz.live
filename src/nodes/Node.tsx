@@ -91,9 +91,12 @@ export const Node = ({
             const target = e.currentTarget as HTMLElement;
             setPosX(touch.pageX - target.clientWidth / 2);
             setPosY(touch.pageY - target.clientHeight / 2);
-            if (onMoved) {
-                onMoved();
-            }
+        }
+    }
+
+    function onTouchEnd() {
+        if (onMoved) {
+            onMoved();
         }
     }
 
@@ -126,6 +129,7 @@ export const Node = ({
                     }}
                     onTouchStart={onTouchStart}
                     onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
                     onClick={() => {
                         if (onTap) {
                             onTap();

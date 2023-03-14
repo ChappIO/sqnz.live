@@ -130,6 +130,7 @@ export const SketchPage = () => {
         }
     }
 
+    console.log(Date.now());
     return (
         <>
             <div className="SketchPage">

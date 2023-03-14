@@ -7,6 +7,7 @@ import './ProgramTriggerNode.scss';
 import {Interval, Note} from "tonal";
 import {usePersistedState} from "../hooks/usePersistedState";
 import {useEffect, useState} from "react";
+import {useClock} from "../hooks/useClock";
 
 const numberOfSemitones = 13;
 
@@ -29,16 +30,15 @@ export const ProgramTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
         namespace: `${project.namespace}/nodes/${nodeProps.id}/steps`
     });
     const [activeStep, setActiveStep] = useState(0);
+    const clock = useClock();
 
     const length = steps.length;
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setActiveStep(prev => (prev + 1) % length);
-        }, 150);
-
-        return () => clearInterval(timer);
-    }, [length]);
+        return clock.onStep((beat, step) => {
+            setActiveStep((beat * 4 + step) % length);
+        });
+    }, [length, clock]);
 
     useEffect(() => {
         const step = steps[activeStep];
