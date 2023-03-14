@@ -29,12 +29,15 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
     const [chance, setChance] = usePersistedState('chance', 100, {
         namespace: `${project.namespace}/nodes/${nodeProps.id}`
     });
+    const [length, setLength] = usePersistedState('length', 1, {
+        namespace: `${project.namespace}/nodes/${nodeProps.id}`
+    });
 
     const interval = 60000 / tempo / steps;
 
     useEffect(() => {
         const timer = setInterval(() => {
-            if(Math.random() * 100 > chance) {
+            if (Math.random() * 100 > chance) {
                 return;
             }
             const notesInScale = Scale.get("C4 " + scale).notes;
@@ -47,12 +50,12 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
 
                 setTimeout(() => {
                     trigger?.stop();
-                }, 100);
+                }, length * interval / 8);
             }
         }, interval);
 
         return () => clearInterval(timer);
-    }, [destinations, interval, getTriggerNode, scale, chance]);
+    }, [destinations, interval, getTriggerNode, scale, chance, length]);
 
 
     return (
@@ -60,75 +63,97 @@ export const RandomTriggerNode: CustomNode = ({...nodeProps}: NodeProps) => {
             <div className="play-zone"
                  ref={ref}
             >
-                <div className="form-group">
-                    <label htmlFor="scale" onClick={() => {
-                        setScale('chromatic');
-                    }}>Scale</label>
-                    <select id="scale" value={scale} onChange={(e) => setScale(e.target.value as any)}>
-                        {Object.values(scales).map(name => (
-                            <option key={name} value={name}>{name}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="tempo"
-                           onClick={() => {
-                               setTempo(120);
-                           }}>
-                        Tempo
-                    </label>
-                    <input className="input-block"
-                           type="range"
-                           name="tempo"
-                           id="tempo"
-                           min="10"
-                           max="500"
-                           value={tempo}
-                           onChange={e => {
-                               setTempo(parseInt(e.target.value))
-                           }}
-                    />
-                    <output id="output" htmlFor="tempo">{tempo} bpm</output>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="steps"
-                           onClick={() => {
-                               setSteps(4);
-                           }}>
-                        Steps
-                    </label>
-                    <input className="input-block"
-                           type="range"
-                           name="steps"
-                           id="steps"
-                           min="1"
-                           max="8"
-                           value={steps}
-                           onChange={e => {
-                               setSteps(parseInt(e.target.value))
-                           }}
-                    />
-                    <output id="output" htmlFor="steps">{steps} spb</output>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="chance"
-                           onClick={() => {
-                               setChance(100);
-                           }}>
-                        Chance
-                    </label>
-                    <input className="input-block"
-                           type="range"
-                           name="chance"
-                           id="chance"
-                           min="0"
-                           max="100"
-                           value={chance}
-                           onChange={e => {
-                               setChance(parseInt(e.target.value))
-                           }}
-                    />
-                    <output id="output" htmlFor="chance">{chance}%</output>
+                <div className="modal-content">
+                    <div className="form-group">
+                        <label htmlFor="scale" onClick={() => {
+                            setScale('chromatic');
+                        }}>Scale</label>
+                        <select id="scale" value={scale} onChange={(e) => setScale(e.target.value as any)}>
+                            {Object.values(scales).map(name => (
+                                <option key={name} value={name}>{name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="tempo"
+                               onClick={() => {
+                                   setTempo(120);
+                               }}>
+                            Tempo
+                        </label>
+                        <input className="input-block"
+                               type="range"
+                               name="tempo"
+                               id="tempo"
+                               min="10"
+                               max="500"
+                               value={tempo}
+                               onChange={e => {
+                                   setTempo(parseInt(e.target.value))
+                               }}
+                        />
+                        <output id="output" htmlFor="tempo">{tempo} bpm</output>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="steps"
+                               onClick={() => {
+                                   setSteps(4);
+                               }}>
+                            Steps
+                        </label>
+                        <input className="input-block"
+                               type="range"
+                               name="steps"
+                               id="steps"
+                               min="1"
+                               max="8"
+                               value={steps}
+                               onChange={e => {
+                                   setSteps(parseInt(e.target.value))
+                               }}
+                        />
+                        <output id="output" htmlFor="steps">{steps} spb</output>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="length"
+                               onClick={() => {
+                                   setLength(1);
+                               }}>
+                            Length
+                        </label>
+                        <input className="input-block"
+                               type="range"
+                               name="chance"
+                               id="length"
+                               min="1"
+                               max="16"
+                               value={length}
+                               onChange={e => {
+                                   setLength(parseInt(e.target.value))
+                               }}
+                        />
+                        <output id="output" htmlFor="length">{length} / 8th step</output>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="chance"
+                               onClick={() => {
+                                   setChance(100);
+                               }}>
+                            Chance
+                        </label>
+                        <input className="input-block"
+                               type="range"
+                               name="chance"
+                               id="chance"
+                               min="0"
+                               max="100"
+                               value={chance}
+                               onChange={e => {
+                                   setChance(parseInt(e.target.value))
+                               }}
+                        />
+                        <output id="output" htmlFor="chance">{chance}%</output>
+                    </div>
                 </div>
             </div>
         </Node>
