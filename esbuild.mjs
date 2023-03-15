@@ -1,7 +1,7 @@
 import esbuild from "esbuild";
 import {sassPlugin} from 'esbuild-sass-plugin'
 import {htmlPlugin} from '@craftamap/esbuild-plugin-html';
-import {rm} from 'node:fs/promises';
+import {readFile, rm} from 'node:fs/promises';
 
 const devMode = process.argv.includes('--dev');
 
@@ -22,6 +22,11 @@ const context = await esbuild.context({
         'firefox57',
         'safari11'
     ],
+    assetNames: 'static/[name]',
+    loader: {
+        '.ttf': 'copy',
+        '.woff2': 'copy',
+    },
     plugins: [
         sassPlugin(),
         htmlPlugin({
@@ -33,9 +38,21 @@ const context = await esbuild.context({
                         'src/dev.ts',
                     ],
                     title: 'SQNZ.live',
+                    htmlTemplate: await readFile('src/index.html')
                 }
             ]
-        })
+        }),
+        {
+            name: 'logger',
+            setup(build) {
+                build.onStart(() => {
+                    console.log('compiling...');
+                });
+                build.onEnd(() => {
+                    console.log('done');
+                });
+            }
+        }
     ],
 });
 
@@ -47,7 +64,7 @@ if (devMode) {
     console.log('serving...');
     await context.serve({
         servedir: 'build',
-        port: 3000
+        port: 3000,
     });
     console.log('watching...');
     await context.watch({});
