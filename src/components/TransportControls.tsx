@@ -6,7 +6,6 @@ export const TransportControls = () => {
 
     useEffect(() => {
         Transport.on('start', () => {
-            console.log('go');
             setState('started');
         });
         Transport.on('stop', () => {
@@ -15,7 +14,6 @@ export const TransportControls = () => {
         Transport.on('pause', () => {
             setState('paused');
         });
-        console.log('sub');
     }, []);
 
     console.log(state);
