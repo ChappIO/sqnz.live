@@ -21,7 +21,6 @@ export const TransportControls = () => {
             return (
                 <>
                     <button className="btn-success" onClick={() => {
-                        console.log('hi');
                         Transport.start();
                     }}>
                         <i className="fas fa-play"/>
