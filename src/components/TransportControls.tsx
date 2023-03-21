@@ -16,8 +16,6 @@ export const TransportControls = () => {
         });
     }, []);
 
-    console.log(state);
-
     switch (state) {
         case "stopped":
             return (
