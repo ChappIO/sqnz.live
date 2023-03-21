@@ -1,0 +1,12 @@
+.TopControls {
+  display: flex;
+  gap: 12px;
+
+  .Spacer {
+    flex-grow: 1;
+  }
+
+  button {
+    margin: 0;
+  }
+}

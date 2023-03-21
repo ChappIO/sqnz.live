@@ -1,10 +1,10 @@
-import {TransportControls} from "./TransportControls";
 import './SketchBook.scss';
+import {TopControls} from "./TopControls";
 
 export const SketchBook = () => {
     return (
         <div className="SketchBook">
-            <TransportControls/>
+            <TopControls/>
         </div>
     );
 }

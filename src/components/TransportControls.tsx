@@ -19,7 +19,7 @@ export const TransportControls = () => {
     switch (state) {
         case "stopped":
             return (
-                <div className="TransportControls">
+                <>
                     <button className="btn-success" onClick={() => {
                         console.log('hi');
                         Transport.start();
@@ -29,11 +29,11 @@ export const TransportControls = () => {
                     <button className="btn-danger-outline" disabled>
                         <i className="fas fa-stop"/>
                     </button>
-                </div>
+                </>
             );
         case "started":
             return (
-                <div className="TransportControls">
+                <>
                     <button className="btn-primary" onClick={() => {
                         Transport.pause();
                     }}>
@@ -44,11 +44,11 @@ export const TransportControls = () => {
                     }}>
                         <i className="fas fa-stop"/>
                     </button>
-                </div>
+                </>
             );
         case "paused":
             return (
-                <div className="TransportControls">
+                <>
                     <button className="btn-success" onClick={() => {
                         Transport.start();
                     }}>
@@ -59,13 +59,13 @@ export const TransportControls = () => {
                     }}>
                         <i className="fas fa-stop"/>
                     </button>
-                </div>
+                </>
             );
         default:
             return (
-                <div className="TransportControls">
+                <>
                     {state}
-                </div>
+                </>
             );
     }
 }
